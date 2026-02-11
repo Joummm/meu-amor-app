@@ -1,100 +1,140 @@
 // ============================================
-// CONFIGURAÇÕES - EDITAR COM SEUS DADOS
+// SCRIPT PRINCIPAL - CORRIGIDO
 // ============================================
 
-// 1. DATA DO INÍCIO DO NAMORO (Ano, Mês, Dia)
-const START_DATE = new Date('2025-09-26');
+// ============================================
+// VERIFICAR E IMPORTAR CONFIGURAÇÕES
+// ============================================
+let CONFIG;
 
-// 2. SEU NOME
-const YOUR_NAME = 'João Nunes';
+try {
+    CONFIG = typeof CONFIG !== 'undefined' ? CONFIG : null;
+} catch (e) {
+    CONFIG = null;
+}
 
-// 3. NOME DA PESSOA AMADA
-const LOVER_NAME = 'Beatriz Martins';
+// Fallback completo caso o config não carregue
+if (!CONFIG) {
+    CONFIG = {
+        couple: {
+            yourName: 'João',
+            loverName: 'Beatriz',
+            nicknames: ['Meu Amor', 'Princesa', 'Vida', 'Coração'],
+            startDate: new Date('2025-09-26T19:30:00'),
+            nextDate: new Date('2026-02-14T20:00:00'),
+            nextDateDescription: 'Dia dos Namorados ❤️',
+            nextDateLocation: 'Restaurante Italiano, 20:00'
+        },
+        playlist: [
+            { title: "Perfect", artist: "Ed Sheeran", duration: "4:23", cover: "fa-heart" },
+            { title: "Ainda Gosto Dela", artist: "Skank", duration: "4:12", cover: "fa-star" },
+            { title: "Trem Bala", artist: "Ana Vilela", duration: "3:48", cover: "fa-train" },
+            { title: "Deixa Eu Te Amar", artist: "Dilsinho", duration: "3:52", cover: "fa-heartbeat" },
+            { title: "Love Story", artist: "Taylor Swift", duration: "3:55", cover: "fa-moon" },
+            { title: "Quando a Chuva Passar", artist: "Ivete Sangalo", duration: "4:05", cover: "fa-cloud-rain" },
+            { title: "Seu Nome", artist: "NX Zero", duration: "3:58", cover: "fa-feather" },
+            { title: "Só Hoje", artist: "Jota Quest", duration: "3:45", cover: "fa-sun" }
+        ],
+        loveLetter: `Desde aquele 26 de setembro, às 19:30, minha vida ganhou um novo significado. Lembro como se fosse hoje: você chegou com seu sorriso tímido, vestindo aquela blusa rosa, e eu soube ali que nada seria igual.
 
-// 4. MENSAGEM DA CARTA DE AMOR
-const LOVE_LETTER = `
-Desde aquele 26 de setembro, minha vida ganhou um novo significado. Você chegou como um presente, e cada dia ao seu lado é uma página nova na mais bela história que eu poderia escrever.
+Beatriz, você não veio ao acaso. Você foi um presente que a vida me deu, desses que a gente nem ousava pedir, mas que o coração sempre desejou em segredo.
 
-Lembro como se fosse hoje do nosso primeiro encontro, do seu sorriso tímido, do brilho nos seus olhos. Naquele momento, eu soube que era você. Era você que eu esperava, era você que eu queria para compartilhar meus sonhos, minhas alegrias, minha vida.
-
-O primeiro beijo foi mágico. O tempo parou, e naquele instante eu tive certeza de que não existia mais ninguém no mundo além de nós dois. Você é meu porto seguro, minha paz, minha inspiração.
-
-Beatriz, você me faz querer ser uma pessoa melhor a cada dia. Seu amor me transforma, me completa, me faz feliz de uma forma que eu nunca imaginei ser possível. Você é minha melhor escolha, meu maior acerto, meu amor eterno.
-
-Prometo estar ao seu lado em todos os momentos, celebrar suas conquistas, enxugar suas lágrimas, fazer você sorrir todos os dias. Prometo te respeitar, te admirar e te amar incondicionalmente.
-
-Obrigado por existir, por ter entrado na minha vida, por me fazer tão feliz. Você é meu presente, meu futuro, meu tudo.
-
-Te amo hoje, amanhã e para todo o sempre. ❤️`;
-
-// 5. DECLARAÇÕES PARA O GERADOR
-const DECLARATIONS = [
-    "Você é a pessoa mais especial que eu já conheci! Seu sorriso ilumina meus dias e seu abraço é meu lugar favorito no mundo.",
-    "Meu coração bate mais forte quando penso em ti. Não sei o que fiz para merecer alguém tão incrível ao meu lado.",
-    "Cada dia ao teu lado é um presente. Você transforma momentos comuns em memórias extraordinárias.",
-    "Você é meu sonho realizado, minha prova de que o amor verdadeiro existe e pode ser ainda mais lindo do que imaginei.",
-    "O amor que sinto por ti não cabe no peito. Transborda em cada olhar, em cada gesto, em cada palavra.",
-    "Você é minha melhor escolha, meu maior acerto, a melhor parte de todos os meus dias.",
-    "Te amar é a melhor parte do meu dia. É o que me faz querer acordar todas as manhãs com um sorriso no rosto.",
-    "Seu sorriso é minha razão de viver. Seus olhos são o caminho para o meu paraíso particular.",
-    "Você é meu porto seguro, meu lar, meu lugar no mundo. Com você, tudo faz sentido.",
-    "Nós dois juntos somos a minha parte favorita da vida. Você me completa de uma forma que nem sabia que precisava.",
-    "Você é a resposta para todas as minhas perguntas, o sentido de todas as minhas buscas.",
-    "Amar você é tão natural quanto respirar. É essencial, é vital, é o que me mantém vivo.",
-    "Em você encontrei o que nem sabia que procurava. Você é meu começo, meu meio e meu eterno.",
-    "Se eu pudesse voltar no tempo, te escolheria de novo. E de novo. E de novo. Sempre você."
-];
-
-// 6. PLAYLIST COMPLETA
-const PLAYLIST = [
-    { title: "Perfect", artist: "Ed Sheeran", duration: "4:23" },
-    { title: "Ainda Gosto Dela", artist: "Skank", duration: "4:12" },
-    { title: "Trem Bala", artist: "Ana Vilela", duration: "3:48" },
-    { title: "Deixa Eu Te Amar", artist: "Dilsinho", duration: "3:52" },
-    { title: "Love Story", artist: "Taylor Swift", duration: "3:55" }
-];
-
-// 7. DATAS ESPECIAIS
-const SPECIAL_DATES = [
-    { day: 26, month: 9, description: "🎉 Nosso primeiro encontro", year: 2025 },
-    { day: 10, month: 10, description: "💋 Primeiro beijo", year: 2025 },
-    { day: 1, month: 11, description: "💍 Início do namoro", year: 2025 },
-    { day: 22, month: 2, description: "🎂 Aniversário da Beatriz", year: 2026 },
-    { day: 14, month: 2, description: "💕 Dia dos Namorados", year: 2026 },
-    { day: 15, month: 3, description: "🎂 Aniversário do João", year: 2026 }
-];
-
-// 8. PERGUNTAS DO QUIZ
-const QUIZ_QUESTIONS = [
-    {
-        question: "Qual é a minha comida favorita?",
-        options: ["Pizza", "Hambúrguer", "Lasanha", "Sushi"],
-        correct: 2
-    },
-    {
-        question: "Qual é a minha cor preferida?",
-        options: ["Vermelho", "Azul", "Verde", "Rosa"],
-        correct: 0
-    },
-    {
-        question: "Onde foi nosso primeiro encontro?",
-        options: ["Cinema", "Café Colonial", "Shopping", "Parque"],
-        correct: 1
-    },
-    {
-        question: "Qual meu hobby favorito?",
-        options: ["Ler", "Ouvir música", "Esportes", "Filmes"],
-        correct: 1
-    },
-    {
-        question: "Qual é meu destino dos sonhos?",
-        options: ["Paris", "Londres", "Nova York", "Roma"],
-        correct: 0
-    }
-];
+Te amo hoje, amanhã e em todas as vidas que existirem. ❤️`,
+        declarations: [
+            "Você é a pessoa mais especial que eu já conheci!",
+            "Meu coração bate mais forte quando penso em ti.",
+            "Cada dia ao teu lado é um presente.",
+            "Você é meu sonho realizado."
+        ],
+        specialDates: [
+            { day: 26, month: 9, year: 2025, description: "🎉 Nosso primeiro encontro" },
+            { day: 10, month: 10, year: 2025, description: "💋 Primeiro beijo" },
+            { day: 1, month: 11, year: 2025, description: "💍 Início do namoro" }
+        ],
+        quizQuestions: [
+            {
+                question: "Qual é a minha comida favorita?",
+                options: ["Pizza", "Hambúrguer", "Lasanha", "Sushi"],
+                correct: 2,
+                funFact: "Lasanha da mamãe é imbatível! 🍝"
+            }
+        ],
+        memories: [
+            { icon: "☕", title: "Primeiro Café", description: "Você derrubou açúcar na mesa e rimos por 10 minutos", date: "26/09/2025" },
+            { icon: "🌹", title: "Primeiro Beijo", description: "A noite mais linda da minha vida", date: "10/10/2025" },
+            { icon: "💍", title: "Pedido de Namoro", description: "O sim mais feliz da minha vida", date: "01/11/2025" }
+        ],
+        poems: [
+            {
+                title: "O Dia que Te Encontrei",
+                verses: [
+                    "O relógio parou às 19:30,",
+                    "Quando seus olhos encontraram os meus.",
+                    "Foi tão simples e tão eterno,",
+                    "Como se a vida inteira tivesse nos esperado."
+                ]
+            }
+        ],
+        galleryCaptions: [
+            "Nosso primeiro encontro - Café Colonial • 26/09/2025 • 19:30",
+            "Nossa primeira viagem - Serra Gaúcha • 10/10/2025 • 14:00",
+            "Seu aniversário - 22/02/2026 • 20:00",
+            "Natal juntos - 25/12/2025 • 20:00",
+            "Ano Novo - 31/12/2025 • 23:59",
+            "Dia dos Namorados - 14/02/2026 • 19:00"
+        ],
+        galleryIcons: ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'],
+        wishlist: [
+            { icon: "✈️", text: "Viajar para Paris" },
+            { icon: "🍳", text: "Fazer curso de culinária juntos" },
+            { icon: "🏠", text: "Comprar nossa casa" },
+            { icon: "🐕", text: "Adotar um cachorro" },
+            { icon: "🏖️", text: "Viagem para Fernando de Noronha" },
+            { icon: "📸", text: "Ensaio fotográfico do casal" }
+        ],
+        settings: {
+            primaryColor: '#ff4d4d',
+            secondaryColor: '#ff7eb3',
+            enableMusic: true,
+            enableConfetti: true,
+            enableFloatingHearts: true,
+            enableNotifications: true,
+            loaderMessage: 'Carregando nossa história de amor...',
+            loaderSubmessage: 'Para você, Beatriz'
+        }
+    };
+}
 
 // ============================================
-// VARIÁVEIS GLOBAIS
+// VARIÁVEIS GLOBAIS (usando CONFIG)
+// ============================================
+
+// Datas
+const START_DATE = CONFIG.couple?.startDate || new Date('2025-09-26T19:30:00');
+const NEXT_DATE = CONFIG.couple?.nextDate || new Date('2026-02-14T20:00:00');
+const NEXT_DATE_DESC = CONFIG.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
+const NEXT_DATE_LOC = CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
+
+// Nomes
+const YOUR_NAME = CONFIG.couple?.yourName || 'João';
+const LOVER_NAME = CONFIG.couple?.loverName || 'Beatriz';
+const NICKNAMES = CONFIG.couple?.nicknames || ['Meu Amor', 'Princesa', 'Vida', 'Coração'];
+
+// Conteúdo
+const LOVE_LETTER = CONFIG.loveLetter || '';
+const DECLARATIONS = CONFIG.declarations || [];
+const PLAYLIST = CONFIG.playlist || [];
+const SPECIAL_DATES = CONFIG.specialDates || [];
+const QUIZ_QUESTIONS = CONFIG.quizQuestions || [];
+const MEMORIES = CONFIG.memories || [];
+const POEMS = CONFIG.poems || [];
+const galleryCaptions = CONFIG.galleryCaptions || [];
+const galleryIcons = CONFIG.galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
+const totalImages = (galleryIcons && galleryIcons.length) ? galleryIcons.length : 6;
+const WISHLIST = CONFIG.wishlist || [];
+
+// ============================================
+// VARIÁVEIS DE ESTADO
 // ============================================
 
 // Player de música
@@ -102,26 +142,19 @@ let isPlaying = false;
 let currentTrack = 0;
 let audio = null;
 let progressInterval = null;
+let musicInitialized = false;
+let fakeCurrentTime = 0;
 
 // Galeria
 let currentImageIndex = 0;
-const totalImages = 6;
-const galleryCaptions = [
-    "Nosso primeiro encontro - Café Colonial, 26/09/2025",
-    "Nossa primeira viagem - Serra Gaúcha, 10/10/2025",
-    "Seu aniversário - 22/02/2026",
-    "Natal juntos - 25/12/2025",
-    "Ano Novo - 31/12/2025",
-    "Dia dos Namorados - 14/02/2026"
-];
 
 // Quiz
 let currentQuestion = 0;
 let score = 0;
 let quizAnswered = false;
+let quizCompleted = false;
 
 // Jogo da memória
-let memoryCards = [];
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard, secondCard;
@@ -130,14 +163,34 @@ let moves = 0;
 let memoryTimer = null;
 let seconds = 0;
 let gameStarted = false;
+let gameCompleted = false;
+
+// Estatísticas
+let visitCount = 1;
+let lastVisit = new Date();
+let messagesCount = 1;
+let wishesCompleted = 0;
+let totalQuizScore = 0;
+
+// Calendário
+let currentDate = new Date();
+let currentMonth = currentDate.getMonth();
+let currentYear = currentDate.getFullYear();
 
 // ============================================
 // INICIALIZAÇÃO
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('❤️ Iniciando site de amor...');
+    
+    // Carregar estatísticas
+    loadStats();
+    
     // Inicializar áudio
-    audio = document.getElementById('bgMusic');
+    if (CONFIG.settings?.enableMusic !== false) {
+        initAudio();
+    }
     
     // Configurar loader
     setupLoader();
@@ -147,7 +200,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(updateTimeCounter, 1000);
     
     // Inicializar quiz
-    initQuiz();
+    if (QUIZ_QUESTIONS && QUIZ_QUESTIONS.length > 0) {
+        initQuiz();
+    }
     
     // Inicializar jogo da memória
     initMemoryGame();
@@ -182,7 +237,58 @@ document.addEventListener('DOMContentLoaded', function() {
     // Substituir nomes
     replaceNames();
     
+    // Inicializar carrossel de memórias
+    if (MEMORIES && MEMORIES.length > 0) {
+        initMemoriesCarousel();
+    }
+    
+    // Inicializar poema do dia
+    if (POEMS && POEMS.length > 0) {
+        initPoemOfTheDay();
+    }
+    
+    // Inicializar modo escuro
+    initDarkMode();
+    
+    // Inicializar modo foco
+    initFocusMode();
+    
+    // Configurar atalhos de teclado
+    setupKeyboardShortcuts();
+    
+    // Inicializar notificações
+    if (CONFIG.settings?.enableNotifications !== false) {
+        initNotifications();
+    }
+    
+    // Inicializar wishlist
+    initWishlist();
+    
+    // Atualizar estatísticas
+    updateStats();
+    
+    // Atualizar ano no footer
+    updateFooterYear();
+    
+    // Carregar mensagens salvas
+    loadWallMessages();
+    
+    // Inicializar dicas de amor
+    initLoveTips();
+    
+    // Atualizar próximo encontro
+    updateNextDate();
+    setInterval(updateNextDate, 60000);
+    
+    // Iniciar corações flutuantes
+    if (CONFIG.settings?.enableFloatingHearts !== false) {
+        startFloatingHearts();
+    }
+    
     console.log('❤️ Site carregado com amor! ❤️');
+    if (LOVER_NAME) {
+        console.log(`👋 Bem-vinda, ${LOVER_NAME}!`);
+    }
 });
 
 // ============================================
@@ -190,14 +296,242 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 
 function setupLoader() {
-    setTimeout(() => {
-        const loader = document.querySelector('.loader-wrapper');
-        loader.style.opacity = '0';
-        setTimeout(() => {
-            loader.style.display = 'none';
-            startFloatingHearts();
-        }, 500);
-    }, 2000);
+    const loader = document.querySelector('.loader-wrapper');
+    const loaderText = document.querySelector('.loader-text');
+    const loaderSubtext = document.querySelector('.loader-subtext');
+    
+    if (!loader) return;
+    
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    if (LOVER_NAME) {
+                        showNotification('❤️ Bem-vinda, ' + LOVER_NAME + '!', 'heart');
+                    }
+                }, 800);
+            }, 600);
+        }
+        
+        if (loaderText) {
+            loaderText.textContent = `${CONFIG.settings?.loaderMessage || 'Carregando nossa história...'} ${Math.floor(progress)}%`;
+        }
+        if (loaderSubtext && progress > 70) {
+            loaderSubtext.textContent = 'Quase lá, amor! 💕';
+        }
+    }, 100);
+}
+
+// ============================================
+// ÁUDIO CORRIGIDO
+// ============================================
+
+function initAudio() {
+    audio = document.getElementById('bgMusic');
+    
+    if (!audio) {
+        audio = new Audio();
+        audio.id = 'bgMusic';
+        document.body.appendChild(audio);
+    }
+    
+    if (audio) {
+        audio.addEventListener('ended', function() {
+            nextMusic();
+        });
+    }
+    
+    if (PLAYLIST && PLAYLIST.length > 0) {
+        updateMusicInfo(currentTrack);
+    }
+}
+
+function updateMusicInfo(index) {
+    if (!PLAYLIST || PLAYLIST.length === 0) return;
+    
+    const track = PLAYLIST[index] || PLAYLIST[0];
+    const titleEl = document.getElementById('currentMusicTitle');
+    const artistEl = document.getElementById('currentMusicArtist');
+    const durationEl = document.getElementById('duration');
+    const albumArt = document.querySelector('.album-art i');
+    
+    if (titleEl) titleEl.textContent = track.title || 'Perfect';
+    if (artistEl) artistEl.textContent = track.artist || 'Ed Sheeran';
+    if (durationEl) durationEl.textContent = track.duration || '4:23';
+    
+    if (albumArt) {
+        albumArt.className = `fas ${track.cover || 'fa-heart'}`;
+    }
+}
+
+function playMusic(index) {
+    if (!PLAYLIST || PLAYLIST.length === 0) {
+        togglePlayDemo();
+        return;
+    }
+    
+    currentTrack = index % PLAYLIST.length;
+    
+    document.querySelectorAll('.playlist-item').forEach((item, i) => {
+        if (item) {
+            if (i === currentTrack) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        }
+    });
+    
+    updateMusicInfo(currentTrack);
+    
+    if (isPlaying) {
+        stopProgressUpdate();
+        startProgressUpdate();
+        if (PLAYLIST[currentTrack]) {
+            showNotification(`🎵 Tocando: ${PLAYLIST[currentTrack].title}`, 'music');
+        }
+    }
+}
+
+function togglePlay() {
+    if (!PLAYLIST || PLAYLIST.length === 0) {
+        togglePlayDemo();
+        return;
+    }
+    
+    const playBtn = document.querySelector('.play-pause i');
+    const musicBtn = document.querySelector('#musicToggle i');
+    
+    if (isPlaying) {
+        if (playBtn) playBtn.className = 'fas fa-play';
+        if (musicBtn) musicBtn.className = 'fas fa-music';
+        stopProgressUpdate();
+        showNotification('⏸️ Música pausada', 'info');
+    } else {
+        if (playBtn) playBtn.className = 'fas fa-pause';
+        if (musicBtn) musicBtn.className = 'fas fa-pause';
+        startProgressUpdate();
+        if (PLAYLIST[currentTrack]) {
+            showNotification(`🎵 Tocando: ${PLAYLIST[currentTrack].title}`, 'music');
+        }
+    }
+    
+    isPlaying = !isPlaying;
+}
+
+function togglePlayDemo() {
+    const playBtn = document.querySelector('.play-pause i');
+    const musicBtn = document.querySelector('#musicToggle i');
+    
+    if (isPlaying) {
+        if (playBtn) playBtn.className = 'fas fa-play';
+        if (musicBtn) musicBtn.className = 'fas fa-music';
+        stopProgressUpdate();
+        showNotification('⏸️ Música pausada', 'info');
+    } else {
+        if (playBtn) playBtn.className = 'fas fa-pause';
+        if (musicBtn) musicBtn.className = 'fas fa-pause';
+        startProgressUpdate();
+        
+        const trackTitle = (PLAYLIST && PLAYLIST[currentTrack]) ? 
+            PLAYLIST[currentTrack].title : 'Perfect';
+        showNotification(`🎵 Tocando: ${trackTitle}`, 'music');
+    }
+    
+    isPlaying = !isPlaying;
+}
+
+function startProgressUpdate() {
+    stopProgressUpdate();
+    
+    fakeCurrentTime = 0;
+    const fakeDuration = 210;
+    
+    progressInterval = setInterval(() => {
+        if (isPlaying) {
+            fakeCurrentTime++;
+            if (fakeCurrentTime > fakeDuration) {
+                fakeCurrentTime = 0;
+                nextMusic();
+            }
+            
+            const progress = (fakeCurrentTime / fakeDuration) * 100;
+            const progressBar = document.querySelector('.progress');
+            const currentTimeEl = document.getElementById('currentTime');
+            
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (currentTimeEl) currentTimeEl.textContent = formatTime(fakeCurrentTime);
+            
+            if (PLAYLIST && PLAYLIST[currentTrack]) {
+                const durationEl = document.getElementById('duration');
+                if (durationEl) durationEl.textContent = PLAYLIST[currentTrack].duration;
+            }
+        }
+    }, 1000);
+}
+
+function stopProgressUpdate() {
+    if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+    }
+}
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+function prevMusic() {
+    if (!PLAYLIST || PLAYLIST.length === 0) return;
+    currentTrack = (currentTrack - 1 + PLAYLIST.length) % PLAYLIST.length;
+    playMusic(currentTrack);
+}
+
+function nextMusic() {
+    if (!PLAYLIST || PLAYLIST.length === 0) return;
+    currentTrack = (currentTrack + 1) % PLAYLIST.length;
+    playMusic(currentTrack);
+}
+
+function setupMusicToggle() {
+    const musicBtn = document.getElementById('musicToggle');
+    if (musicBtn) {
+        musicBtn.addEventListener('click', function() {
+            if (!musicInitialized) {
+                initAudio();
+                musicInitialized = true;
+            }
+            togglePlay();
+        });
+    }
+}
+
+function updatePlaylistUI() {
+    const playlistItems = document.querySelectorAll('.playlist-item');
+    playlistItems.forEach((item, index) => {
+        if (item && index < PLAYLIST.length) {
+            const titleEl = item.querySelector('.playlist-title');
+            const artistEl = item.querySelector('.playlist-artist');
+            const durationEl = item.querySelector('.playlist-duration');
+            const iconEl = item.querySelector('i:first-child');
+            
+            if (titleEl) titleEl.textContent = PLAYLIST[index].title;
+            if (artistEl) artistEl.textContent = PLAYLIST[index].artist;
+            if (durationEl) durationEl.textContent = PLAYLIST[index].duration;
+            if (iconEl) {
+                iconEl.className = `fas ${PLAYLIST[index].cover || 'fa-music'}`;
+            }
+        }
+    });
 }
 
 // ============================================
@@ -208,20 +542,36 @@ function updateTimeCounter() {
     const now = new Date();
     const diff = now - START_DATE;
     
-    const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-    const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+    const seconds = Math.floor((diff / 1000) % 60);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
     
-    document.getElementById('years').textContent = years.toString().padStart(2, '0');
-    document.getElementById('months').textContent = months.toString().padStart(2, '0');
-    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-    document.getElementById('totalDays').textContent = days;
+    let months = 0;
+    let tempDate = new Date(START_DATE);
+    while (tempDate <= now) {
+        tempDate.setMonth(tempDate.getMonth() + 1);
+        if (tempDate <= now) months++;
+    }
+    
+    const years = Math.floor(months / 12);
+    months = months % 12;
+    
+    const yearsEl = document.getElementById('years');
+    const monthsEl = document.getElementById('months');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const totalDaysEl = document.getElementById('totalDays');
+    
+    if (yearsEl) yearsEl.textContent = years.toString().padStart(2, '0');
+    if (monthsEl) monthsEl.textContent = months.toString().padStart(2, '0');
+    if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+    if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+    if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+    if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+    if (totalDaysEl) totalDaysEl.textContent = days;
 }
 
 // ============================================
@@ -230,110 +580,26 @@ function updateTimeCounter() {
 
 function openLetter() {
     const letterContent = document.getElementById('letterContent');
-    letterContent.classList.remove('hidden');
-    document.getElementById('loveLetterText').innerHTML = LOVE_LETTER.replace(/\n/g, '<br>');
-    
-    // Animação
-    letterContent.style.animation = 'slideUp 0.5s ease';
-    
-    // Esconder envelope
     const envelope = document.querySelector('.envelope');
-    envelope.style.opacity = '0.5';
+    const loveLetterText = document.getElementById('loveLetterText');
+    
+    if (!letterContent || !envelope) return;
+    
+    letterContent.classList.remove('hidden');
+    if (loveLetterText && LOVE_LETTER) {
+        loveLetterText.innerHTML = LOVE_LETTER.replace(/\n/g, '<br>');
+    }
+    
+    letterContent.style.animation = 'slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    
+    envelope.style.opacity = '0.3';
+    envelope.style.transform = 'scale(0.95)';
     envelope.style.pointerEvents = 'none';
-}
-
-// ============================================
-// PLAYER DE MÚSICA
-// ============================================
-
-function setupMusicToggle() {
-    document.getElementById('musicToggle').addEventListener('click', function() {
-        togglePlay();
-    });
-}
-
-function togglePlay() {
-    const playBtn = document.querySelector('.play-pause i');
     
-    if (isPlaying) {
-        audio.pause();
-        playBtn.className = 'fas fa-play';
-        document.querySelector('.music-toggle i').className = 'fas fa-pause';
-        document.querySelector('.music-toggle').style.background = 'linear-gradient(135deg, #ff758c, #ff7eb3)';
-        clearInterval(progressInterval);
-    } else {
-        audio.play();
-        playBtn.className = 'fas fa-pause';
-        document.querySelector('.music-toggle i').className = 'fas fa-music';
-        document.querySelector('.music-toggle').style.background = 'linear-gradient(135deg, #ff4d4d, #ff7eb3)';
-        startProgressUpdate();
+    if (CONFIG.settings?.enableConfetti !== false) {
+        createConfetti('letter');
     }
-    
-    isPlaying = !isPlaying;
-}
-
-function startProgressUpdate() {
-    if (progressInterval) clearInterval(progressInterval);
-    
-    progressInterval = setInterval(() => {
-        if (audio.duration) {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            document.querySelector('.progress').style.width = `${progress}%`;
-            document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
-            document.getElementById('duration').textContent = formatTime(audio.duration);
-        }
-    }, 100);
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-}
-
-function playMusic(index) {
-    currentTrack = index;
-    
-    // Atualizar UI
-    document.querySelectorAll('.playlist-item').forEach((item, i) => {
-        if (i === index) {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
-    });
-    
-    // Atualizar info
-    document.getElementById('currentMusicTitle').textContent = PLAYLIST[index].title;
-    document.getElementById('currentMusicArtist').textContent = PLAYLIST[index].artist;
-    document.getElementById('duration').textContent = PLAYLIST[index].duration || '3:30';
-    
-    // Se estiver tocando, continuar
-    if (isPlaying) {
-        audio.src = `musica-${index}.mp3`; // Substituir pelo caminho real
-        audio.play();
-    }
-}
-
-function prevMusic() {
-    currentTrack = (currentTrack - 1 + PLAYLIST.length) % PLAYLIST.length;
-    playMusic(currentTrack);
-}
-
-function nextMusic() {
-    currentTrack = (currentTrack + 1) % PLAYLIST.length;
-    playMusic(currentTrack);
-}
-
-function updatePlaylistUI() {
-    const playlistItems = document.querySelectorAll('.playlist-item');
-    playlistItems.forEach((item, index) => {
-        if (index < PLAYLIST.length) {
-            item.querySelector('.playlist-title').textContent = PLAYLIST[index].title;
-            item.querySelector('.playlist-artist').textContent = PLAYLIST[index].artist;
-            item.querySelector('.playlist-duration').textContent = PLAYLIST[index].duration || '3:30';
-        }
-    });
+    localStorage.setItem('letterOpened', 'true');
 }
 
 // ============================================
@@ -342,35 +608,47 @@ function updatePlaylistUI() {
 
 function openLightbox(index) {
     currentImageIndex = index;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    updateLightboxImage();
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateLightboxImage();
+    }
     
-    // Atualizar thumbnails
     document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-        if (i === index) {
-            thumb.classList.add('active');
-        } else {
-            thumb.classList.remove('active');
+        if (thumb) {
+            if (i === index) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
         }
     });
 }
 
 function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = 'auto';
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.style.animation = 'fadeOut 0.3s';
+        setTimeout(() => {
+            lightbox.classList.remove('active');
+            lightbox.style.animation = '';
+            document.body.style.overflow = 'auto';
+        }, 200);
+    }
 }
 
 function changeImage(direction) {
     currentImageIndex = (currentImageIndex + direction + totalImages) % totalImages;
     updateLightboxImage();
     
-    // Atualizar thumbnails
     document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-        if (i === currentImageIndex) {
-            thumb.classList.add('active');
-        } else {
-            thumb.classList.remove('active');
+        if (thumb) {
+            if (i === currentImageIndex) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
         }
     });
 }
@@ -380,10 +658,12 @@ function jumpToImage(index) {
     updateLightboxImage();
     
     document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-        if (i === index) {
-            thumb.classList.add('active');
-        } else {
-            thumb.classList.remove('active');
+        if (thumb) {
+            if (i === index) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
         }
     });
 }
@@ -392,9 +672,14 @@ function updateLightboxImage() {
     const image = document.querySelector('.lightbox-image');
     const caption = document.getElementById('lightboxCaption');
     
-    const icons = ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
-    image.innerHTML = icons[currentImageIndex].repeat(8);
-    caption.textContent = galleryCaptions[currentImageIndex];
+    if (image) {
+        const icons = galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
+        const icon = icons[currentImageIndex] || '❤️';
+        image.innerHTML = icon.repeat(8);
+    }
+    if (caption && galleryCaptions && galleryCaptions[currentImageIndex]) {
+        caption.textContent = galleryCaptions[currentImageIndex];
+    }
 }
 
 // ============================================
@@ -402,80 +687,165 @@ function updateLightboxImage() {
 // ============================================
 
 function initQuiz() {
+    if (!QUIZ_QUESTIONS || QUIZ_QUESTIONS.length === 0) return;
+    
     currentQuestion = 0;
     score = 0;
     quizAnswered = false;
+    quizCompleted = false;
     loadQuestion();
     
-    // Atualizar score display
-    document.querySelector('.quiz-score').innerHTML = `❤️ ${score} pontos`;
+    const quizScore = document.querySelector('.quiz-score');
+    if (quizScore) quizScore.innerHTML = `❤️ ${score} pontos`;
 }
 
 function loadQuestion() {
+    if (!QUIZ_QUESTIONS || QUIZ_QUESTIONS.length === 0) return;
+    
+    if (currentQuestion >= QUIZ_QUESTIONS.length) {
+        endQuiz();
+        return;
+    }
+    
     const q = QUIZ_QUESTIONS[currentQuestion];
     
-    document.querySelector('.quiz-question-number').textContent = 
-        `Pergunta ${currentQuestion + 1}/${QUIZ_QUESTIONS.length}`;
-    document.getElementById('quizQuestion').textContent = q.question;
-    
-    // Atualizar barra de progresso
-    const progress = ((currentQuestion + 1) / QUIZ_QUESTIONS.length) * 100;
-    document.getElementById('quizProgress').style.width = `${progress}%`;
-    
-    // Criar opções
+    const questionNumberEl = document.querySelector('.quiz-question-number');
+    const questionEl = document.getElementById('quizQuestion');
+    const progressEl = document.getElementById('quizProgress');
     const optionsContainer = document.getElementById('quizOptions');
-    optionsContainer.innerHTML = '';
+    const feedbackEl = document.getElementById('quizFeedback');
     
-    q.options.forEach((option, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-option';
-        btn.textContent = option;
-        btn.onclick = () => checkAnswer(index);
-        optionsContainer.appendChild(btn);
-    });
+    if (questionNumberEl) {
+        questionNumberEl.textContent = `Pergunta ${currentQuestion + 1}/${QUIZ_QUESTIONS.length}`;
+    }
+    if (questionEl) questionEl.textContent = q.question;
     
-    // Limpar feedback
-    document.getElementById('quizFeedback').innerHTML = '';
+    const progress = ((currentQuestion + 1) / QUIZ_QUESTIONS.length) * 100;
+    if (progressEl) progressEl.style.width = `${progress}%`;
+    
+    if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+        optionsContainer.style.display = 'grid';
+        
+        q.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-option';
+            btn.textContent = option;
+            btn.onclick = () => checkAnswer(index);
+            optionsContainer.appendChild(btn);
+        });
+    }
+    
+    if (feedbackEl) feedbackEl.innerHTML = '';
     quizAnswered = false;
 }
 
 function checkAnswer(selectedIndex) {
-    if (quizAnswered) return;
+    if (quizAnswered || !QUIZ_QUESTIONS || currentQuestion >= QUIZ_QUESTIONS.length) return;
     
     const q = QUIZ_QUESTIONS[currentQuestion];
     const isCorrect = selectedIndex === q.correct;
     
     const options = document.querySelectorAll('.quiz-option');
+    const feedbackEl = document.getElementById('quizFeedback');
+    const quizScoreEl = document.querySelector('.quiz-score');
     
     if (isCorrect) {
-        options[selectedIndex].classList.add('correct');
+        if (options[selectedIndex]) options[selectedIndex].classList.add('correct');
         score += 10;
-        document.getElementById('quizFeedback').innerHTML = '<span class="feedback-correct">✓ Correto! +10 pontos</span>';
-        createMiniConfetti();
+        totalQuizScore += 10;
+        if (feedbackEl) {
+            feedbackEl.innerHTML = `
+                <span class="feedback-correct">
+                    <i class="fas fa-check-circle"></i> Correto! +10 pontos
+                    <br><small>${q.funFact || ''}</small>
+                </span>
+            `;
+        }
+        if (CONFIG.settings?.enableConfetti !== false) {
+            createMiniConfetti();
+        }
+        showNotification('✅ Resposta correta! +10 pontos', 'success');
     } else {
-        options[selectedIndex].classList.add('incorrect');
-        options[q.correct].classList.add('correct');
-        document.getElementById('quizFeedback').innerHTML = '<span class="feedback-incorrect">✗ Não foi dessa vez. A resposta correta está destacada.</span>';
+        if (options[selectedIndex]) options[selectedIndex].classList.add('incorrect');
+        if (options[q.correct]) options[q.correct].classList.add('correct');
+        if (feedbackEl) {
+            feedbackEl.innerHTML = `
+                <span class="feedback-incorrect">
+                    <i class="fas fa-times-circle"></i> Não foi dessa vez.
+                    <br><small>A resposta correta está destacada.</small>
+                    <br><small>${q.funFact || ''}</small>
+                </span>
+            `;
+        }
+        showNotification('❌ Resposta incorreta', 'error');
     }
     
-    document.querySelector('.quiz-score').innerHTML = `❤️ ${score} pontos`;
-    
+    if (quizScoreEl) quizScoreEl.innerHTML = `❤️ ${score} pontos`;
     options.forEach(btn => btn.disabled = true);
     quizAnswered = true;
     
     setTimeout(() => {
-        if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
-            currentQuestion++;
+        currentQuestion++;
+        if (currentQuestion < QUIZ_QUESTIONS.length) {
             loadQuestion();
         } else {
-            // Fim do quiz
-            document.getElementById('quizQuestion').innerHTML = 
-                `🎉 Parabéns! Você fez ${score} pontos de ${QUIZ_QUESTIONS.length * 10}!`;
-            document.getElementById('quizOptions').style.display = 'none';
-            document.getElementById('quizFeedback').innerHTML = 
-                '<span class="feedback-congrats">Obrigado por me conhecer tão bem! ❤️</span>';
+            endQuiz();
         }
-    }, 2000);
+    }, 2500);
+}
+
+function endQuiz() {
+    if (!QUIZ_QUESTIONS || QUIZ_QUESTIONS.length === 0) return;
+    
+    quizCompleted = true;
+    
+    const totalPossible = QUIZ_QUESTIONS.length * 10;
+    const percentage = (score / totalPossible) * 100;
+    
+    let message = '';
+    let emoji = '';
+    
+    if (percentage === 100) {
+        message = 'Perfeito! Você me conhece mais do que eu mesmo!';
+        emoji = '🏆';
+        if (CONFIG.settings?.enableConfetti !== false) {
+            createConfetti('win');
+        }
+    } else if (percentage >= 70) {
+        message = 'Muito bem! Você me conhece muito bem!';
+        emoji = '🌟';
+        createMiniConfetti();
+    } else if (percentage >= 50) {
+        message = 'Bom! Mas ainda pode melhorar 😉';
+        emoji = '📚';
+    } else {
+        message = 'Precisamos conversar mais sobre mim! 💬';
+        emoji = '💭';
+    }
+    
+    const questionEl = document.getElementById('quizQuestion');
+    const optionsEl = document.getElementById('quizOptions');
+    const feedbackEl = document.getElementById('quizFeedback');
+    
+    if (questionEl) {
+        questionEl.innerHTML = `
+            <div style="text-align: center;">
+                ${emoji} ${message} ${emoji}
+            </div>
+        `;
+    }
+    if (optionsEl) optionsEl.style.display = 'none';
+    if (feedbackEl) {
+        feedbackEl.innerHTML = `
+            <span class="feedback-congrats">
+                Você fez ${score} pontos de ${totalPossible}!<br>
+                ❤️ Obrigado por me conhecer tão bem! ❤️
+            </span>
+        `;
+    }
+    
+    updateStats();
 }
 
 // ============================================
@@ -484,42 +854,85 @@ function checkAnswer(selectedIndex) {
 
 function addWallMessage() {
     const input = document.getElementById('wallInput');
+    if (!input) return;
+    
     const message = input.value.trim();
+    
+    if (message.length < 3) {
+        showNotification('💬 Digite uma mensagem com pelo menos 3 caracteres', 'warning');
+        return;
+    }
     
     if (message) {
         const wallMessages = document.getElementById('wallMessages');
         const now = new Date();
         const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         
+        const messageId = 'msg_' + Date.now();
+        
         const messageEl = document.createElement('div');
         messageEl.className = 'wall-message';
-        messageEl.style.animation = 'slideIn 0.5s';
+        messageEl.id = messageId;
+        messageEl.style.animation = 'slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
         messageEl.innerHTML = `
             <div class="message-author">
                 <div class="author-avatar">❤️</div>
-                <span>${YOUR_NAME}</span>
+                <span>${escapeHtml(YOUR_NAME)}</span>
             </div>
             <p>${escapeHtml(message)}</p>
             <div class="message-footer">
                 <span class="message-date"><i class="far fa-clock"></i> Hoje, ${timeStr}</span>
-                <span class="message-love"><i class="fas fa-heart"></i> 0</span>
+                <span class="message-love" onclick="likeMessage('${messageId}')">
+                    <i class="fas fa-heart"></i> <span class="like-count">0</span>
+                </span>
             </div>
         `;
         
-        wallMessages.insertBefore(messageEl, wallMessages.firstChild);
+        if (wallMessages) {
+            wallMessages.insertBefore(messageEl, wallMessages.firstChild);
+        }
         input.value = '';
-        document.getElementById('charCounter').textContent = '0/200';
         
-        // Atualizar contador
+        const charCounter = document.getElementById('charCounter');
+        if (charCounter) charCounter.textContent = '0/200';
+        
+        messagesCount++;
         updateMessageCount();
+        updateStats();
         
-        // Adicionar evento de like
-        messageEl.querySelector('.message-love').addEventListener('click', function(e) {
-            const count = parseInt(this.textContent.match(/\d+/)[0]) + 1;
-            this.innerHTML = `<i class="fas fa-heart"></i> ${count}`;
-            this.style.color = '#ff4d4d';
+        showNotification('💕 Mensagem enviada com amor!', 'heart');
+        if (CONFIG.settings?.enableConfetti !== false) {
+            createMiniConfetti();
+        }
+        
+        saveWallMessage({
+            id: messageId,
+            author: YOUR_NAME,
+            message: message,
+            date: `Hoje, ${timeStr}`,
+            likes: 0
         });
     }
+}
+
+function likeMessage(messageId) {
+    const messageEl = document.getElementById(messageId);
+    if (!messageEl) return;
+    
+    const likeSpan = messageEl.querySelector('.like-count');
+    let likes = parseInt(likeSpan.textContent) || 0;
+    likes++;
+    likeSpan.textContent = likes;
+    
+    const heartIcon = messageEl.querySelector('.message-love i');
+    if (heartIcon) {
+        heartIcon.style.animation = 'pulse 0.3s';
+        setTimeout(() => {
+            heartIcon.style.animation = '';
+        }, 300);
+    }
+    
+    showNotification('❤️ Você curtiu esta mensagem!', 'heart');
 }
 
 function escapeHtml(text) {
@@ -530,62 +943,172 @@ function escapeHtml(text) {
 
 function updateMessageCount() {
     const count = document.querySelectorAll('.wall-message').length;
-    const messageText = count === 1 ? 'mensagem' : 'mensagens';
-    document.getElementById('messageCount').innerHTML = 
-        `<i class="fas fa-heart"></i> ${count} ${messageText}`;
+    const messageCountEl = document.getElementById('messageCount');
+    if (messageCountEl) {
+        messageCountEl.innerHTML = `<i class="fas fa-heart"></i> ${count} ${count === 1 ? 'mensagem' : 'mensagens'} de amor`;
+    }
 }
 
 function setupTextareaCounter() {
     const textarea = document.getElementById('wallInput');
+    if (!textarea) return;
+    
     textarea.addEventListener('input', function() {
         const count = this.value.length;
-        document.getElementById('charCounter').textContent = `${count}/200`;
+        const charCounter = document.getElementById('charCounter');
+        if (charCounter) charCounter.textContent = `${count}/200`;
         
         if (count > 200) {
             this.value = this.value.substring(0, 200);
-            document.getElementById('charCounter').textContent = '200/200';
+            if (charCounter) charCounter.textContent = '200/200';
+            showNotification('⚠️ Limite de 200 caracteres atingido', 'warning');
         }
+        
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
     });
+}
+
+function saveWallMessage(message) {
+    try {
+        let messages = JSON.parse(localStorage.getItem('wallMessages') || '[]');
+        messages.unshift(message);
+        if (messages.length > 30) messages.pop();
+        localStorage.setItem('wallMessages', JSON.stringify(messages));
+    } catch (e) {
+        console.warn('Erro ao salvar mensagem:', e);
+    }
+}
+
+function loadWallMessages() {
+    try {
+        const messages = JSON.parse(localStorage.getItem('wallMessages') || '[]');
+        const wallMessages = document.getElementById('wallMessages');
+        
+        if (!wallMessages) return;
+        
+        messages.forEach(msg => {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'wall-message';
+            messageEl.id = msg.id;
+            messageEl.innerHTML = `
+                <div class="message-author">
+                    <div class="author-avatar">❤️</div>
+                    <span>${escapeHtml(msg.author)}</span>
+                </div>
+                <p>${escapeHtml(msg.message)}</p>
+                <div class="message-footer">
+                    <span class="message-date"><i class="far fa-clock"></i> ${msg.date}</span>
+                    <span class="message-love" onclick="likeMessage('${msg.id}')">
+                        <i class="fas fa-heart"></i> <span class="like-count">${msg.likes || 0}</span>
+                    </span>
+                </div>
+            `;
+            wallMessages.appendChild(messageEl);
+        });
+    } catch (e) {
+        console.warn('Erro ao carregar mensagens:', e);
+    }
 }
 
 // ============================================
 // WISHLIST
 // ============================================
 
-document.querySelectorAll('.wishlist-item input').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const item = this.closest('.wishlist-item');
-        if (this.checked) {
-            item.classList.add('checked');
-        } else {
-            item.classList.remove('checked');
+function initWishlist() {
+    // Criar wishlist dinamicamente se existir no config
+    if (WISHLIST && WISHLIST.length > 0) {
+        const wishlistContainer = document.querySelector('.wishlist');
+        if (wishlistContainer) {
+            wishlistContainer.innerHTML = '';
+            WISHLIST.forEach((item, index) => {
+                const wishlistItem = document.createElement('div');
+                wishlistItem.className = 'wishlist-item';
+                wishlistItem.innerHTML = `
+                    <input type="checkbox" id="wish${index + 1}">
+                    <label for="wish${index + 1}">
+                        <span class="wish-icon">${item.icon || '❤️'}</span>
+                        <span class="wish-text">${item.text || 'Sonho'}</span>
+                    </label>
+                `;
+                wishlistContainer.appendChild(wishlistItem);
+            });
         }
+    }
+    
+    const wishlistItems = document.querySelectorAll('.wishlist-item input');
+    
+    wishlistItems.forEach((checkbox, index) => {
+        checkbox.addEventListener('change', function() {
+            const item = this.closest('.wishlist-item');
+            if (this.checked) {
+                if (item) item.classList.add('checked');
+                const wishText = item ? item.querySelector('.wish-text') : null;
+                showNotification(`✨ Sonho realizado: ${wishText ? wishText.textContent : ''}`, 'success');
+                if (CONFIG.settings?.enableConfetti !== false) {
+                    createMiniConfetti();
+                }
+                wishesCompleted++;
+            } else {
+                if (item) item.classList.remove('checked');
+                wishesCompleted--;
+            }
+            
+            updateWishlistProgress();
+            saveWishlistProgress();
+            updateStats();
+        });
         
-        updateWishlistProgress();
+        try {
+            const saved = localStorage.getItem(`wish_${index}`);
+            if (saved === 'true') {
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new Event('change'));
+            }
+        } catch (e) {
+            console.warn('Erro ao carregar wishlist:', e);
+        }
     });
-});
+}
 
 function updateWishlistProgress() {
     const total = document.querySelectorAll('.wishlist-item').length;
     const checked = document.querySelectorAll('.wishlist-item input:checked').length;
-    const percentage = Math.round((checked / total) * 100);
+    const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
     
-    document.querySelector('.progress-percentage').textContent = `${percentage}%`;
-    document.getElementById('wishProgressFill').style.width = `${percentage}%`;
+    const percentageEl = document.querySelector('.progress-percentage');
+    const progressFillEl = document.getElementById('wishProgressFill');
+    const messageEl = document.getElementById('wishMessage');
     
-    // Mensagem motivacional
-    const message = document.getElementById('wishMessage');
-    if (percentage === 0) {
-        message.textContent = 'Vamos realizar nossos sonhos juntos! ❤️';
-    } else if (percentage < 30) {
-        message.textContent = 'Estamos no começo, mas vamos longe! ✨';
-    } else if (percentage < 60) {
-        message.textContent = 'Metade do caminho! Continue sonhando! 🌟';
-    } else if (percentage < 100) {
-        message.textContent = 'Quase lá! Mais alguns sonhos para realizar! 💫';
-    } else {
-        message.textContent = 'PARABÉNS! Todos os sonhos realizados! 🎉❤️';
-        createConfetti();
+    if (percentageEl) percentageEl.textContent = `${percentage}%`;
+    if (progressFillEl) progressFillEl.style.width = `${percentage}%`;
+    
+    if (messageEl) {
+        if (percentage === 0) {
+            messageEl.textContent = 'Vamos realizar nossos sonhos juntos! ❤️';
+        } else if (percentage < 30) {
+            messageEl.textContent = 'Estamos no começo, mas vamos longe! ✨';
+        } else if (percentage < 60) {
+            messageEl.textContent = 'Metade do caminho! Continue sonhando! 🌟';
+        } else if (percentage < 100) {
+            messageEl.textContent = 'Quase lá! Mais alguns sonhos para realizar! 💫';
+        } else {
+            messageEl.textContent = 'PARABÉNS! Todos os sonhos realizados! 🎉❤️';
+            if (CONFIG.settings?.enableConfetti !== false) {
+                createConfetti('win');
+            }
+            showNotification('🎉 TODOS OS SONHOS REALIZADOS!', 'congrats');
+        }
+    }
+}
+
+function saveWishlistProgress() {
+    try {
+        document.querySelectorAll('.wishlist-item input').forEach((checkbox, index) => {
+            localStorage.setItem(`wish_${index}`, checkbox.checked);
+        });
+    } catch (e) {
+        console.warn('Erro ao salvar wishlist:', e);
     }
 }
 
@@ -595,11 +1118,14 @@ function updateWishlistProgress() {
 
 function initMemoryGame() {
     const gameContainer = document.getElementById('memoryGame');
+    if (!gameContainer) return;
+    
     const cards = [
-        '❤️', '❤️', '🌹', '🌹', '🎵', '🎵', '💋', '💋', '💍', '💍', '✨', '✨'
+        '❤️', '❤️', '🌹', '🌹', '🎵', '🎵', 
+        '💋', '💋', '💍', '💍', '✨', '✨',
+        '☕', '☕', '🎬', '🎬'
     ];
     
-    // Embaralhar
     cards.sort(() => Math.random() - 0.5);
     
     let html = '';
@@ -614,7 +1140,6 @@ function initMemoryGame() {
     
     gameContainer.innerHTML = html;
     
-    // Adicionar event listeners
     document.querySelectorAll('.memory-card').forEach(card => {
         card.addEventListener('click', flipCard);
     });
@@ -626,6 +1151,8 @@ function flipCard() {
     if (lockBoard) return;
     if (this === firstCard) return;
     if (this.classList.contains('flipped')) return;
+    if (this.classList.contains('matched')) return;
+    
     if (!gameStarted) {
         startMemoryTimer();
         gameStarted = true;
@@ -650,10 +1177,16 @@ function checkForMatch() {
     if (isMatch) {
         disableCards();
         matchedPairs++;
-        document.getElementById('pairCount').innerHTML = 
-            `<i class="fas fa-heart"></i> Pares: ${matchedPairs}/6`;
         
-        if (matchedPairs === 6) {
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+        
+        const pairCountEl = document.getElementById('pairCount');
+        if (pairCountEl) {
+            pairCountEl.innerHTML = `<i class="fas fa-heart"></i> Pares: ${matchedPairs}/8`;
+        }
+        
+        if (matchedPairs === 8) {
             endMemoryGame();
         }
     } else {
@@ -673,7 +1206,7 @@ function unflipCards() {
         firstCard.classList.remove('flipped');
         secondCard.classList.remove('flipped');
         resetBoard();
-    }, 1000);
+    }, 800);
 }
 
 function resetBoard() {
@@ -683,8 +1216,10 @@ function resetBoard() {
 
 function updateMoves() {
     moves++;
-    document.getElementById('moveCount').innerHTML = 
-        `<i class="fas fa-arrows-alt"></i> Movimentos: ${moves}`;
+    const moveCountEl = document.getElementById('moveCount');
+    if (moveCountEl) {
+        moveCountEl.innerHTML = `<i class="fas fa-arrows-alt"></i> Movimentos: ${moves}`;
+    }
 }
 
 function resetMemoryStats() {
@@ -692,12 +1227,15 @@ function resetMemoryStats() {
     matchedPairs = 0;
     seconds = 0;
     gameStarted = false;
+    gameCompleted = false;
     
-    document.getElementById('moveCount').innerHTML = 
-        `<i class="fas fa-arrows-alt"></i> Movimentos: 0`;
-    document.getElementById('pairCount').innerHTML = 
-        `<i class="fas fa-heart"></i> Pares: 0/6`;
-    document.getElementById('timerDisplay').textContent = '00:00';
+    const moveCountEl = document.getElementById('moveCount');
+    const pairCountEl = document.getElementById('pairCount');
+    const timerEl = document.getElementById('timerDisplay');
+    
+    if (moveCountEl) moveCountEl.innerHTML = `<i class="fas fa-arrows-alt"></i> Movimentos: 0`;
+    if (pairCountEl) pairCountEl.innerHTML = `<i class="fas fa-heart"></i> Pares: 0/8`;
+    if (timerEl) timerEl.textContent = '00:00';
     
     if (memoryTimer) {
         clearInterval(memoryTimer);
@@ -710,32 +1248,174 @@ function startMemoryTimer() {
         seconds++;
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        document.getElementById('timerDisplay').textContent = 
-            `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        const timerEl = document.getElementById('timerDisplay');
+        if (timerEl) {
+            timerEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
     }, 1000);
 }
 
 function endMemoryGame() {
     clearInterval(memoryTimer);
-    setTimeout(() => {
-        alert(`🎉 Parabéns! Você completou o jogo em ${moves} movimentos e ${seconds} segundos! ❤️`);
-        createConfetti();
-    }, 500);
+    gameCompleted = true;
+    
+    showNotification(`🎮 Parabéns! Você completou o jogo! ${moves} movimentos, ${seconds}s`, 'win');
+    if (CONFIG.settings?.enableConfetti !== false) {
+        createConfetti('win');
+    }
 }
 
 function resetMemoryGame() {
     document.querySelectorAll('.memory-card').forEach(card => {
         card.classList.remove('flipped');
+        card.classList.remove('matched');
+        card.addEventListener('click', flipCard);
     });
+    
     initMemoryGame();
+    showNotification('🔄 Novo jogo iniciado!', 'info');
 }
 
 function shuffleMemoryCards() {
-    const gameContainer = document.getElementById('memoryGame');
     const cards = Array.from(document.querySelectorAll('.memory-card'));
     
     cards.forEach(card => {
         card.style.order = Math.floor(Math.random() * cards.length);
+    });
+    
+    showNotification('🔄 Cartas embaralhadas!', 'info');
+}
+
+// ============================================
+// CARROSSEL DE MEMÓRIAS
+// ============================================
+
+function initMemoriesCarousel() {
+    const container = document.querySelector('.memories-carousel');
+    if (!container || !MEMORIES || MEMORIES.length === 0) return;
+    
+    let html = '';
+    MEMORIES.forEach((memory, index) => {
+        html += `
+            <div class="memory-card-story" onclick="expandMemory(${index})">
+                <div class="memory-icon">${memory.icon || '❤️'}</div>
+                <h4>${memory.title || 'Memória'}</h4>
+                <p>${memory.description || ''}</p>
+                <span class="memory-date">${memory.date || ''}</span>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+function expandMemory(index) {
+    if (!MEMORIES || !MEMORIES[index]) return;
+    
+    const memory = MEMORIES[index];
+    
+    const modal = document.createElement('div');
+    modal.className = 'memory-modal';
+    modal.innerHTML = `
+        <div class="memory-modal-content">
+            <span class="close-modal" onclick="this.parentElement.parentElement.remove()">&times;</span>
+            <div class="memory-modal-icon">${memory.icon || '❤️'}</div>
+            <h2>${memory.title || 'Memória'}</h2>
+            <p class="memory-modal-description">${memory.description || ''}</p>
+            <p class="memory-modal-date">${memory.date || ''}</p>
+            <button onclick="this.parentElement.parentElement.remove()">Fechar</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+// ============================================
+// POEMA DO DIA
+// ============================================
+
+function initPoemOfTheDay() {
+    const container = document.querySelector('.poem-container');
+    if (!container || !POEMS || POEMS.length === 0) return;
+    
+    const today = new Date();
+    const poemIndex = today.getDate() % POEMS.length;
+    
+    const poem = POEMS[poemIndex];
+    let versesHTML = '';
+    if (poem.verses) {
+        poem.verses.forEach(verse => {
+            versesHTML += `<p>${verse}</p>`;
+        });
+    }
+    
+    container.innerHTML = `
+        <h3>${poem.title || 'Poema de Amor'}</h3>
+        <div class="poem-verses">
+            ${versesHTML}
+        </div>
+        <span class="poem-date">Poema do dia ${today.toLocaleDateString('pt-BR')}</span>
+    `;
+}
+
+// ============================================
+// MODO ESCURO
+// ============================================
+
+function initDarkMode() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (!darkModeToggle) return;
+    
+    try {
+        const darkMode = localStorage.getItem('darkMode') === 'true';
+        if (darkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+    } catch (e) {
+        console.warn('Erro ao carregar modo escuro:', e);
+    }
+    
+    darkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        this.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        try {
+            localStorage.setItem('darkMode', isDark);
+        } catch (e) {
+            console.warn('Erro ao salvar modo escuro:', e);
+        }
+        showNotification(isDark ? '🌙 Modo escuro ativado' : '☀️ Modo claro ativado', 'info');
+    });
+}
+
+// ============================================
+// MODO FOCO
+// ============================================
+
+function initFocusMode() {
+    const focusToggle = document.getElementById('focusModeToggle');
+    if (!focusToggle) return;
+    
+    focusToggle.addEventListener('click', function() {
+        document.body.classList.toggle('focus-mode');
+        const isFocus = document.body.classList.contains('focus-mode');
+        this.innerHTML = isFocus ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
+        
+        if (isFocus) {
+            document.querySelectorAll('section:not(.hero):not(.counter-premium)').forEach(el => {
+                if (el) el.style.opacity = '0.3';
+            });
+            const hero = document.querySelector('.hero');
+            const counter = document.querySelector('.counter-premium');
+            if (hero) hero.style.opacity = '1';
+            if (counter) counter.style.opacity = '1';
+            showNotification('🎯 Modo foco ativado - Apenas o essencial', 'info');
+        } else {
+            document.querySelectorAll('section').forEach(el => {
+                if (el) el.style.opacity = '1';
+            });
+            showNotification('🎯 Modo foco desativado', 'info');
+        }
     });
 }
 
@@ -743,72 +1423,85 @@ function shuffleMemoryCards() {
 // CALENDÁRIO
 // ============================================
 
-let currentDate = new Date();
-let currentMonth = currentDate.getMonth();
-let currentYear = currentDate.getFullYear();
-
 function renderCalendar() {
     const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     
-    document.getElementById('monthYear').textContent = 
-        `${monthNames[currentMonth]} ${currentYear}`;
+    const monthYearEl = document.getElementById('monthYear');
+    if (monthYearEl) {
+        monthYearEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
     
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const lastDate = new Date(currentYear, currentMonth + 1, 0).getDate();
     
     let daysHTML = '';
     
-    // Dias vazios
     for (let i = 0; i < firstDay; i++) {
         daysHTML += '<div class="calendar-day empty"></div>';
     }
     
-    // Dias do mês
     for (let i = 1; i <= lastDate; i++) {
         let classes = ['calendar-day'];
         let isSpecial = false;
         let specialDesc = '';
         
-        // Verificar se é hoje
-        if (i === currentDate.getDate() && 
-            currentMonth === currentDate.getMonth() && 
-            currentYear === currentDate.getFullYear()) {
+        const today = new Date();
+        if (i === today.getDate() && 
+            currentMonth === today.getMonth() && 
+            currentYear === today.getFullYear()) {
             classes.push('today');
         }
         
-        // Verificar se é data especial
-        SPECIAL_DATES.forEach(date => {
-            if (date.day === i && date.month === currentMonth + 1) {
-                classes.push('special');
-                isSpecial = true;
-                specialDesc = date.description;
-            }
-        });
+        if (SPECIAL_DATES) {
+            SPECIAL_DATES.forEach(date => {
+                if (date.day === i && date.month === currentMonth + 1) {
+                    classes.push('special');
+                    isSpecial = true;
+                    specialDesc = date.description;
+                }
+            });
+        }
         
-        daysHTML += `<div class="${classes.join(' ')}" ${isSpecial ? `title="${specialDesc}"` : ''}>
+        daysHTML += `<div class="${classes.join(' ')}" 
+                    ${isSpecial ? `title="${specialDesc}"` : ''}
+                    onclick="showDateInfo(${i}, ${currentMonth + 1}, ${currentYear})">
             ${i}
             ${isSpecial ? '<span class="special-marker">❤️</span>' : ''}
         </div>`;
     }
     
-    document.getElementById('calendarDays').innerHTML = daysHTML;
-    
-    // Atualizar próximos eventos
+    const calendarDaysEl = document.getElementById('calendarDays');
+    if (calendarDaysEl) calendarDaysEl.innerHTML = daysHTML;
     updateUpcomingEvents();
 }
 
+function showDateInfo(day, month, year) {
+    if (!SPECIAL_DATES) return;
+    
+    const isSpecial = SPECIAL_DATES.some(d => d.day === day && d.month === month);
+    
+    if (isSpecial) {
+        const event = SPECIAL_DATES.find(d => d.day === day && d.month === month);
+        showNotification(`📅 ${event.description}`, 'info');
+    } else {
+        showNotification(`📆 ${day}/${month}/${year}`, 'info');
+    }
+}
+
 function updateUpcomingEvents() {
+    if (!SPECIAL_DATES) return;
+    
     const now = new Date();
     const eventsContainer = document.getElementById('upcomingEvents');
+    if (!eventsContainer) return;
     
-    // Filtrar datas futuras
     const upcoming = SPECIAL_DATES.filter(date => {
         const eventDate = new Date(date.year, date.month - 1, date.day);
         return eventDate >= now;
     }).sort((a, b) => {
         return new Date(a.year, a.month - 1, a.day) - new Date(b.year, b.month - 1, b.day);
-    }).slice(0, 3);
+    }).slice(0, 5);
     
     let html = '';
     upcoming.forEach(event => {
@@ -816,20 +1509,20 @@ function updateUpcomingEvents() {
         const diffDays = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
         
         html += `
-            <div class="event-item">
+            <div class="event-item" onclick="showDateInfo(${event.day}, ${event.month}, ${event.year})">
                 <div class="event-date">
                     <span class="event-day">${event.day}</span>
                     <span class="event-month">${getMonthAbbr(event.month)}</span>
                 </div>
                 <div class="event-info">
                     <span class="event-title">${event.description}</span>
-                    <span class="event-days">${diffDays} dias</span>
+                    <span class="event-days">${diffDays === 0 ? 'Hoje! 🎉' : `${diffDays} dias`}</span>
                 </div>
             </div>
         `;
     });
     
-    eventsContainer.innerHTML = html || '<p class="no-events">Nenhum evento próximo</p>';
+    eventsContainer.innerHTML = html || '<p class="no-events">Nenhum evento próximo 💕</p>';
 }
 
 function getMonthAbbr(month) {
@@ -860,13 +1553,16 @@ function nextMonth() {
 // ============================================
 
 function generateDeclaration() {
+    if (!DECLARATIONS || DECLARATIONS.length === 0) return;
+    
     const randomIndex = Math.floor(Math.random() * DECLARATIONS.length);
     const declaration = DECLARATIONS[randomIndex];
     const declarationEl = document.getElementById('declarationText');
     
-    // Animação
+    if (!declarationEl) return;
+    
     declarationEl.style.opacity = '0';
-    declarationEl.style.transform = 'translateY(20px)';
+    declarationEl.style.transform = 'translateY(30px)';
     
     setTimeout(() => {
         declarationEl.textContent = declaration;
@@ -874,12 +1570,13 @@ function generateDeclaration() {
         declarationEl.style.transform = 'translateY(0)';
     }, 200);
     
-    // Efeito no botão
     const btn = document.querySelector('.declaration-btn');
-    btn.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-        btn.style.transform = 'scale(1)';
-    }, 200);
+    if (btn) {
+        btn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 200);
+    }
 }
 
 // ============================================
@@ -888,61 +1585,179 @@ function generateDeclaration() {
 
 function openGift() {
     const giftContent = document.getElementById('giftContent');
-    giftContent.classList.toggle('hidden');
+    if (!giftContent) return;
     
-    if (!giftContent.classList.contains('hidden')) {
-        giftContent.style.animation = 'slideUp 0.5s';
-        createConfetti();
+    if (giftContent.classList.contains('hidden')) {
+        giftContent.classList.remove('hidden');
+        giftContent.style.animation = 'slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        if (CONFIG.settings?.enableConfetti !== false) {
+            createConfetti('gift');
+        }
+        showNotification('🎁 Presente aberto! Espero que goste ❤️', 'gift');
+        try {
+            localStorage.setItem('giftOpened', 'true');
+        } catch (e) {
+            console.warn('Erro ao salvar:', e);
+        }
+    } else {
+        giftContent.classList.add('hidden');
     }
 }
 
 // ============================================
-// CONTADOR PRÓXIMO ENCONTRO
+// PRÓXIMO ENCONTRO
 // ============================================
 
 function updateNextDate() {
-    const nextDate = new Date('2026-02-14');
+    const nextDate = CONFIG.couple?.nextDate || new Date('2026-02-14T20:00:00');
     const now = new Date();
     const diff = nextDate - now;
     
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     
-    document.getElementById('nextDateDays').textContent = days.toString().padStart(2, '0');
+    const daysElement = document.getElementById('nextDateDays');
+    const planElement = document.getElementById('nextDatePlan');
+    const locationElement = document.querySelector('.next-date-location span');
     
-    // Mensagem especial
+    if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
+    if (planElement) planElement.innerHTML = CONFIG.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
+    if (locationElement) locationElement.textContent = CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
+    
     if (days === 0) {
-        document.getElementById('nextDateDays').style.color = '#ffd700';
-        document.getElementById('nextDatePlan').innerHTML = 'HOJE É O GRANDE DIA! 🎉❤️';
+        if (daysElement) {
+            daysElement.style.color = '#ffd700';
+            daysElement.style.animation = 'pulse 1s infinite';
+        }
+        if (planElement) {
+            planElement.innerHTML = 'HOJE É O GRANDE DIA! 🎉❤️';
+            planElement.style.animation = 'pulse 1s infinite';
+        }
+        if (locationElement) locationElement.textContent = (CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00') + ' - Estou indo!';
+        if (CONFIG.settings?.enableConfetti !== false) {
+            createConfetti('date');
+        }
+    } else if (days === 1) {
+        if (daysElement) daysElement.style.color = '#ffa500';
+        if (planElement) planElement.innerHTML = 'AMANHÃ! ❤️✨';
+        if (locationElement) locationElement.textContent = (CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00') + ' - Ansioso!';
     }
 }
 
-setInterval(updateNextDate, 60000); // Atualizar a cada minuto
-updateNextDate();
+// ============================================
+// NOTIFICAÇÕES
+// ============================================
+
+function initNotifications() {
+    if (!document.querySelector('.notification-container')) {
+        const container = document.createElement('div');
+        container.className = 'notification-container';
+        document.body.appendChild(container);
+    }
+}
+
+function showNotification(message, type = 'info') {
+    if (CONFIG.settings?.enableNotifications === false) return;
+    
+    const container = document.querySelector('.notification-container');
+    if (!container) return;
+    
+    const id = 'notif_' + Date.now();
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.id = id;
+    
+    let icon = '';
+    switch(type) {
+        case 'success': icon = '✅'; break;
+        case 'error': icon = '❌'; break;
+        case 'warning': icon = '⚠️'; break;
+        case 'heart': icon = '❤️'; break;
+        case 'music': icon = '🎵'; break;
+        case 'gift': icon = '🎁'; break;
+        case 'win': icon = '🏆'; break;
+        case 'congrats': icon = '🎉'; break;
+        default: icon = '💬';
+    }
+    
+    notification.innerHTML = `
+        <span class="notification-icon">${icon}</span>
+        <span class="notification-message">${message}</span>
+        <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    container.appendChild(notification);
+    
+    setTimeout(() => {
+        const notif = document.getElementById(id);
+        if (notif) {
+            notif.style.animation = 'slideOut 0.3s';
+            setTimeout(() => notif.remove(), 300);
+        }
+    }, 5000);
+}
+
+// ============================================
+// DICAS DE AMOR
+// ============================================
+
+function initLoveTips() {
+    const tips = [
+        "💡 O segredo do amor não é mudar o outro, mas aceitar e crescer juntos.",
+        "💡 Um 'eu te amo' dito de verdade vale mais que mil palavras jogadas ao vento.",
+        "💡 Os melhores momentos são os mais simples: um café, um abraço, um olhar.",
+        "💡 Amor de verdade não se desgasta com o tempo - se fortalece.",
+        "💡 A felicidade está nas pequenas coisas que fazemos um pelo outro.",
+        "💡 Perdoar é um ato de amor. Esquecer é um ato de sabedoria.",
+        "💡 O amor não é sobre encontrar a pessoa perfeita, mas sobre enxergar a perfeição na pessoa imperfeita.",
+        "💡 Crescer juntos é a maior prova de amor que existe."
+    ];
+    
+    setInterval(() => {
+        if (Math.random() > 0.7) {
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            showNotification(randomTip, 'info');
+        }
+    }, 45000);
+}
 
 // ============================================
 // CONFETES
 // ============================================
 
-function createConfetti() {
+function createConfetti(type = 'default') {
+    if (CONFIG.settings?.enableConfetti === false) return;
+    
     const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
+    let count = 150;
+    let colors = ['#ff4d4d', '#ff7eb3', '#ffd700', '#ff9a9e', '#fad0c4', '#ff758c'];
+    
+    if (type === 'win') {
+        count = 300;
+        colors = ['#ffd700', '#ffa500', '#ff4d4d', '#ff7eb3', '#9b59b6', '#3498db'];
+    } else if (type === 'gift' || type === 'date') {
+        colors = ['#ff6b6b', '#ff8787', '#ffa500', '#ffd700'];
+    }
+    
     const particles = [];
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < count; i++) {
         particles.push({
             x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
+            y: Math.random() * canvas.height - canvas.height,
             r: Math.random() * 6 + 2,
-            d: Math.random() * 100,
-            color: `hsl(${Math.random() * 60 + 320}, 100%, 65%)`,
-            rotation: Math.random() * 360,
-            speed: Math.random() * 3 + 2
+            color: colors[Math.floor(Math.random() * colors.length)],
+            speed: Math.random() * 4 + 3,
+            tilt: Math.random() * 10 - 5
         });
     }
     
     let animationFrame;
+    let startTime = Date.now();
     
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -954,7 +1769,7 @@ function createConfetti() {
             ctx.fill();
             
             p.y += p.speed;
-            p.rotation += 1;
+            p.x += Math.sin(p.y * 0.01) * 2;
             
             if (p.y > canvas.height) {
                 p.y = 0;
@@ -962,62 +1777,19 @@ function createConfetti() {
             }
         });
         
-        animationFrame = requestAnimationFrame(draw);
+        if (Date.now() - startTime < 3000) {
+            animationFrame = requestAnimationFrame(draw);
+        } else {
+            cancelAnimationFrame(animationFrame);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
     }
     
     draw();
-    
-    setTimeout(() => {
-        cancelAnimationFrame(animationFrame);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }, 5000);
 }
 
 function createMiniConfetti() {
-    const canvas = document.getElementById('confettiCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
-    const particles = [];
-    for (let i = 0; i < 50; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: Math.random() * 4 + 1,
-            color: `hsl(${Math.random() * 60 + 320}, 100%, 65%)`,
-            speed: Math.random() * 2 + 1
-        });
-    }
-    
-    let animationFrame;
-    
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        particles.forEach(p => {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-            ctx.fillStyle = p.color;
-            ctx.fill();
-            
-            p.y += p.speed;
-            
-            if (p.y > canvas.height) {
-                p.y = 0;
-                p.x = Math.random() * canvas.width;
-            }
-        });
-        
-        animationFrame = requestAnimationFrame(draw);
-    }
-    
-    draw();
-    
-    setTimeout(() => {
-        cancelAnimationFrame(animationFrame);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }, 2000);
+    createConfetti('mini');
 }
 
 // ============================================
@@ -1025,26 +1797,31 @@ function createMiniConfetti() {
 // ============================================
 
 function startFloatingHearts() {
+    if (CONFIG.settings?.enableFloatingHearts === false) return;
+    
     const container = document.querySelector('.floating-hearts-container');
+    if (!container) return;
     
     setInterval(() => {
-        if (container.children.length < 30) {
+        if (container.children.length < 40) {
             const heart = document.createElement('div');
-            heart.innerHTML = ['❤️', '💕', '💗', '💓', '💖', '💘'][Math.floor(Math.random() * 6)];
+            const hearts = ['❤️', '💕', '💗', '💓', '💖', '💘', '💝', '💞'];
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
             heart.style.position = 'absolute';
             heart.style.left = Math.random() * 100 + '%';
             heart.style.top = '100%';
             heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
-            heart.style.opacity = Math.random() * 0.5 + 0.3;
-            heart.style.animation = `floatHeart ${Math.random() * 3 + 5}s linear`;
+            heart.style.opacity = Math.random() * 0.6 + 0.2;
+            heart.style.animation = `floatHeart ${Math.random() * 4 + 6}s linear`;
             heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '999';
             container.appendChild(heart);
             
             setTimeout(() => {
                 heart.remove();
-            }, 8000);
+            }, 10000);
         }
-    }, 400);
+    }, 300);
 }
 
 // ============================================
@@ -1053,9 +1830,10 @@ function startFloatingHearts() {
 
 function setupBackToTop() {
     const backToTop = document.getElementById('backToTop');
+    if (!backToTop) return;
     
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
+        if (window.scrollY > 400) {
             backToTop.classList.add('visible');
         } else {
             backToTop.classList.remove('visible');
@@ -1082,12 +1860,14 @@ function setupScrollAnimations() {
             }
         });
     }, {
-        threshold: 0.1
+        threshold: 0.2
     });
     
-    document.querySelectorAll('section, .gallery-item, .timeline-item, .counter-block').forEach(el => {
-        el.classList.add('fade-in');
-        observer.observe(el);
+    document.querySelectorAll('section, .gallery-item, .timeline-item, .counter-block, .memory-card-story').forEach(el => {
+        if (el) {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        }
     });
 }
 
@@ -1111,6 +1891,85 @@ function setupSmoothScroll() {
 }
 
 // ============================================
+// ATALHOS DE TECLADO
+// ============================================
+
+function setupKeyboardShortcuts() {
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lightbox = document.getElementById('lightbox');
+            if (lightbox && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        }
+        
+        if (e.key === ' ' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            const musicToggle = document.querySelector('.music-toggle');
+            if (musicToggle) {
+                musicToggle.click();
+            }
+        }
+        
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox && lightbox.classList.contains('active')) {
+            if (e.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeImage(1);
+            }
+        }
+    });
+}
+
+// ============================================
+// ESTATÍSTICAS
+// ============================================
+
+function loadStats() {
+    try {
+        visitCount = parseInt(localStorage.getItem('visitCount') || '0') + 1;
+        localStorage.setItem('visitCount', visitCount);
+        
+        lastVisit = new Date(localStorage.getItem('lastVisit') || new Date());
+        localStorage.setItem('lastVisit', new Date().toISOString());
+        
+        messagesCount = parseInt(localStorage.getItem('messagesCount') || '1');
+        wishesCompleted = parseInt(localStorage.getItem('wishesCompleted') || '0');
+        totalQuizScore = parseInt(localStorage.getItem('totalQuizScore') || '0');
+    } catch (e) {
+        console.warn('Erro ao carregar estatísticas:', e);
+    }
+}
+
+function updateStats() {
+    const statVisits = document.getElementById('statVisits');
+    const statMessages = document.getElementById('statMessages');
+    const statWishes = document.getElementById('statWishes');
+    const statQuizScore = document.getElementById('statQuizScore');
+    const footerVisitCount = document.getElementById('footerVisitCount');
+    const footerLastVisit = document.getElementById('footerLastVisit');
+    
+    if (statVisits) statVisits.textContent = visitCount;
+    if (statMessages) statMessages.textContent = messagesCount;
+    if (statWishes) statWishes.textContent = wishesCompleted;
+    if (statQuizScore) statQuizScore.textContent = totalQuizScore;
+    
+    if (footerVisitCount) footerVisitCount.innerHTML = `❤️ Visitas: ${visitCount}`;
+    
+    const lastVisitStr = lastVisit.toLocaleDateString('pt-BR');
+    if (footerLastVisit) footerLastVisit.innerHTML = `Última visita: ${lastVisitStr}`;
+    
+    try {
+        localStorage.setItem('messagesCount', messagesCount);
+        localStorage.setItem('wishesCompleted', wishesCompleted);
+        localStorage.setItem('totalQuizScore', totalQuizScore);
+    } catch (e) {
+        console.warn('Erro ao salvar estatísticas:', e);
+    }
+}
+
+// ============================================
 // SUBSTITUIR NOMES
 // ============================================
 
@@ -1122,98 +1981,46 @@ function replaceNames() {
     document.querySelectorAll('.hero-subtitle').forEach(el => {
         if (el) el.textContent = `${LOVER_NAME} & ${YOUR_NAME}`;
     });
+    
+    const greeting = document.querySelector('.greeting');
+    if (greeting) {
+        const randomNick = NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
+        greeting.innerHTML = `Para ${randomNick}, meu amor ❤️`;
+    }
 }
 
 // ============================================
-// EVENT LISTENERS ADICIONAIS
+// ATUALIZAR ANO NO FOOTER
 // ============================================
 
-window.addEventListener('resize', () => {
-    // Recalcular canvas se necessário
-});
-
-window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('active')) {
-        closeLightbox();
+function updateFooterYear() {
+    const yearEl = document.querySelector('.footer-date');
+    if (yearEl) {
+        const currentYear = new Date().getFullYear();
+        yearEl.innerHTML = `<i class="far fa-calendar-alt"></i> Dia dos Namorados ${currentYear}`;
     }
-});
+}
 
 // ============================================
-// CSS ANIMATIONS ADICIONAIS
+// EXPOR FUNÇÕES GLOBAIS
 // ============================================
 
-const style = document.createElement('style');
-style.textContent = `
-    .fade-in {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    
-    .fade-in.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    @keyframes floatHeart {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.3;
-        }
-        100% {
-            transform: translateY(-100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-    
-    .back-to-top {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #ff758c, #ff7eb3);
-        border: none;
-        border-radius: 50%;
-        color: white;
-        font-size: 20px;
-        cursor: pointer;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s;
-        z-index: 9999;
-        box-shadow: 0 5px 20px rgba(255, 77, 77, 0.3);
-    }
-    
-    .back-to-top.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-    
-    .back-to-top:hover {
-        transform: scale(1.1);
-    }
-    
-    .quiz-option:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-    }
-    
-    .feedback-correct {
-        color: #4CAF50;
-        font-weight: bold;
-    }
-    
-    .feedback-incorrect {
-        color: #f44336;
-        font-weight: bold;
-    }
-    
-    .feedback-congrats {
-        color: #ff4d4d;
-        font-size: 18px;
-        font-weight: bold;
-    }
-`;
-
-document.head.appendChild(style);
+window.openLightbox = openLightbox;
+window.closeLightbox = closeLightbox;
+window.changeImage = changeImage;
+window.jumpToImage = jumpToImage;
+window.openLetter = openLetter;
+window.prevMusic = prevMusic;
+window.nextMusic = nextMusic;
+window.playMusic = playMusic;
+window.togglePlay = togglePlay;
+window.addWallMessage = addWallMessage;
+window.likeMessage = likeMessage;
+window.resetMemoryGame = resetMemoryGame;
+window.shuffleMemoryCards = shuffleMemoryCards;
+window.prevMonth = prevMonth;
+window.nextMonth = nextMonth;
+window.generateDeclaration = generateDeclaration;
+window.openGift = openGift;
+window.expandMemory = expandMemory;
+window.showDateInfo = showDateInfo;

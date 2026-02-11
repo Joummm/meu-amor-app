@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para Beatriz ❤️ Nosso Amor Eterno</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600;700&family=Great+Vibes&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600;700&family=Great+Vibes&family=Sacramento&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -22,20 +22,29 @@
 
     <!-- Música de fundo -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="sua-musica.mp3" type="audio/mp3">
+        <source src="" type="audio/mp3">
     </audio>
 
-    <!-- Botão de música flutuante -->
+    <!-- Botões flutuantes -->
     <button id="musicToggle" class="music-toggle">
         <i class="fas fa-music"></i>
         <span class="music-tooltip">Tocar música</span>
     </button>
 
-    <!-- Botão voltar ao topo -->
     <button id="backToTop" class="back-to-top">
         <i class="fas fa-chevron-up"></i>
         <span class="tooltip">Voltar ao topo</span>
     </button>
+
+    <!-- Botões de controle adicionais -->
+    <div class="control-buttons-floating">
+        <button id="darkModeToggle" class="control-btn-floating" title="Modo Escuro/Claro">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button id="focusModeToggle" class="control-btn-floating" title="Modo Foco">
+            <i class="fas fa-expand"></i>
+        </button>
+    </div>
 
     <!-- Confetes canvas -->
     <canvas id="confettiCanvas"></canvas>
@@ -74,7 +83,7 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-date">26 Setembro 2025</div>
+                    <div class="timeline-date">26 Setembro 2025 • 19:30</div>
                     <div class="timeline-content">
                         <div class="timeline-icon">❤️</div>
                         <h3>O dia que tudo começou</h3>
@@ -84,7 +93,7 @@
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-date">10 Outubro 2025</div>
+                    <div class="timeline-date">10 Outubro 2025 • 20:15</div>
                     <div class="timeline-content">
                         <div class="timeline-icon">💋</div>
                         <h3>O momento mágico</h3>
@@ -94,7 +103,7 @@
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-date">1 Novembro 2025</div>
+                    <div class="timeline-date">1 Novembro 2025 • 18:00</div>
                     <div class="timeline-content">
                         <div class="timeline-icon">💍</div>
                         <h3>Sim, eu aceito!</h3>
@@ -198,7 +207,7 @@
             <div class="counter-backdrop"></div>
             <div class="counter-content">
                 <h2>⏰ Tempo ao seu lado</h2>
-                <div class="counter-message-small">Desde 26 de Setembro de 2025</div>
+                <div class="counter-message-small">Desde 26 de Setembro de 2025 • 19:30</div>
                 <div class="counter-grid">
                     <div class="counter-block">
                         <span class="counter-number" id="years">00</span>
@@ -226,7 +235,7 @@
                     </div>
                 </div>
                 <div class="counter-message">
-                    <span id="totalDays"></span> dias de pura felicidade 💕
+                    <span id="totalDays"></span> de pura felicidade 💕
                 </div>
                 <div class="counter-hearts">
                     <span>❤️</span>
@@ -345,7 +354,47 @@
                         </div>
                         <span class="playlist-duration">3:55</span>
                     </div>
+                    <div class="playlist-item" onclick="playMusic(5)">
+                        <i class="fas fa-cloud-rain"></i>
+                        <div class="playlist-info">
+                            <span class="playlist-title">Quando a Chuva Passar</span>
+                            <span class="playlist-artist">Ivete Sangalo</span>
+                        </div>
+                        <span class="playlist-duration">4:05</span>
+                    </div>
+                    <div class="playlist-item" onclick="playMusic(6)">
+                        <i class="fas fa-feather"></i>
+                        <div class="playlist-info">
+                            <span class="playlist-title">Seu Nome</span>
+                            <span class="playlist-artist">NX Zero</span>
+                        </div>
+                        <span class="playlist-duration">3:58</span>
+                    </div>
+                    <div class="playlist-item" onclick="playMusic(7)">
+                        <i class="fas fa-sun"></i>
+                        <div class="playlist-info">
+                            <span class="playlist-title">Só Hoje</span>
+                            <span class="playlist-artist">Jota Quest</span>
+                        </div>
+                        <span class="playlist-duration">3:45</span>
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Carrossel de Memórias - NOVO -->
+        <section class="memories-section">
+            <h2 class="section-title">📸 Memórias que guardo no coração</h2>
+            <div class="memories-carousel">
+                <!-- Preenchido pelo JavaScript -->
+            </div>
+        </section>
+
+        <!-- Poema do Dia - NOVO -->
+        <section class="poem-section">
+            <h2 class="section-title">📖 Poema do Dia</h2>
+            <div class="poem-container">
+                <!-- Preenchido pelo JavaScript -->
             </div>
         </section>
 
@@ -360,19 +409,17 @@
                             <span>Teste do Amor</span>
                         </div>
                         <div class="quiz-stats">
-                            <span class="quiz-question-number">Pergunta 1/5</span>
+                            <span class="quiz-question-number">Pergunta 1/10</span>
                             <span class="quiz-score">❤️ 0 pontos</span>
                         </div>
                     </div>
                     <div class="quiz-progress">
-                        <div class="quiz-progress-bar" id="quizProgress" style="width: 20%"></div>
+                        <div class="quiz-progress-bar" id="quizProgress" style="width: 10%"></div>
                     </div>
                     <div class="quiz-question">
                         <h3 id="quizQuestion">Qual é a minha comida favorita?</h3>
                     </div>
-                    <div class="quiz-options" id="quizOptions">
-                        <!-- Options will be inserted by JS -->
-                    </div>
+                    <div class="quiz-options" id="quizOptions"></div>
                     <div class="quiz-feedback" id="quizFeedback"></div>
                 </div>
             </div>
@@ -385,7 +432,7 @@
                 <div class="wall-header">
                     <div class="wall-stats">
                         <i class="fas fa-heart"></i>
-                        <span id="messageCount">1 mensagem</span>
+                        <span id="messageCount">1 mensagem de amor</span>
                     </div>
                 </div>
                 <div class="wall-messages" id="wallMessages">
@@ -397,7 +444,9 @@
                         <p>Você é o amor da minha vida, Beatriz! Cada dia ao seu lado é especial.</p>
                         <div class="message-footer">
                             <span class="message-date"><i class="far fa-clock"></i> Hoje, 14:30</span>
-                            <span class="message-love"><i class="fas fa-heart"></i> 5</span>
+                            <span class="message-love" onclick="likeMessage(this.closest('.wall-message').id)">
+                                <i class="fas fa-heart"></i> <span class="like-count">5</span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -461,6 +510,20 @@
                             <span class="wish-text">Ensaio fotográfico do casal</span>
                         </label>
                     </div>
+                    <div class="wishlist-item">
+                        <input type="checkbox" id="wish7">
+                        <label for="wish7">
+                            <span class="wish-icon">🎓</span>
+                            <span class="wish-text">Fazer pós-graduação juntos</span>
+                        </label>
+                    </div>
+                    <div class="wishlist-item">
+                        <input type="checkbox" id="wish8">
+                        <label for="wish8">
+                            <span class="wish-icon">🌍</span>
+                            <span class="wish-text">Volta ao mundo</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="wishlist-progress">
                     <div class="progress-header">
@@ -488,16 +551,14 @@
                     </div>
                     <div class="memory-pairs">
                         <i class="fas fa-heart"></i>
-                        <span id="pairCount">Pares: 0/6</span>
+                        <span id="pairCount">Pares: 0/8</span>
                     </div>
                     <div class="memory-timer">
                         <i class="fas fa-hourglass-half"></i>
                         <span id="timerDisplay">00:00</span>
                     </div>
                 </div>
-                <div class="memory-game" id="memoryGame">
-                    <!-- Cards will be generated by JS -->
-                </div>
+                <div class="memory-game" id="memoryGame"></div>
                 <div class="memory-controls">
                     <button onclick="resetMemoryGame()" class="memory-reset">
                         <i class="fas fa-redo-alt"></i>
@@ -583,9 +644,7 @@
                 </div>
                 <div class="calendar-events">
                     <h4><i class="fas fa-calendar-alt"></i> Próximos eventos</h4>
-                    <div id="upcomingEvents" class="upcoming-events">
-                        <!-- Events will be inserted by JS -->
-                    </div>
+                    <div id="upcomingEvents" class="upcoming-events"></div>
                 </div>
             </div>
         </section>
@@ -603,7 +662,7 @@
                             <div class="point-info">
                                 <strong>Primeiro encontro</strong>
                                 <span>Café Colonial, Centro</span>
-                                <small>26/09/2025</small>
+                                <small>26/09/2025 • 19:30</small>
                             </div>
                         </div>
                         <div class="map-point">
@@ -611,7 +670,7 @@
                             <div class="point-info">
                                 <strong>Primeiro beijo</strong>
                                 <span>Parque da Cidade</span>
-                                <small>10/10/2025</small>
+                                <small>10/10/2025 • 20:15</small>
                             </div>
                         </div>
                         <div class="map-point">
@@ -620,6 +679,14 @@
                                 <strong>Nosso lugar</strong>
                                 <span>Praia do Amor</span>
                                 <small>Todo verão</small>
+                            </div>
+                        </div>
+                        <div class="map-point">
+                            <span class="point-marker">📍</span>
+                            <div class="point-info">
+                                <strong>Pedido de namoro</strong>
+                                <span>Praça Central</span>
+                                <small>01/11/2025 • 18:00</small>
                             </div>
                         </div>
                     </div>
@@ -686,6 +753,33 @@
             </div>
         </section>
 
+        <!-- Estatísticas do Amor - NOVA -->
+        <section class="stats-section">
+            <h2 class="section-title">📊 Nossas Estatísticas</h2>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number" id="statVisits">1</span>
+                    <span class="stat-label">Visitas ao site</span>
+                    <span class="stat-icon">❤️</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statMessages">1</span>
+                    <span class="stat-label">Mensagens de amor</span>
+                    <span class="stat-icon">💌</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statWishes">0</span>
+                    <span class="stat-label">Sonhos realizados</span>
+                    <span class="stat-icon">✨</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="statQuizScore">0</span>
+                    <span class="stat-label">Pontos no quiz</span>
+                    <span class="stat-icon">🏆</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Footer romântico premium -->
         <footer class="romantic-footer">
             <div class="footer-particles"></div>
@@ -707,13 +801,19 @@
                     <i class="far fa-calendar-alt"></i>
                     Dia dos Namorados 2026
                 </div>
+                <div class="footer-stats">
+                    <span id="footerVisitCount">❤️ Visitas: 1</span>
+                    <span>•</span>
+                    <span id="footerLastVisit">Última visita: Hoje</span>
+                </div>
                 <div class="footer-copyright">
-                    © Nosso Amor Eterno - Feito com ❤️
+                    © Nosso Amor Eterno - Feito com ❤️ para a Beatriz
                 </div>
             </div>
         </footer>
     </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
+    <script src="config.js"></script>
+    
 </body>
 </html>
