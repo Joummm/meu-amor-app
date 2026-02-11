@@ -1,21 +1,166 @@
 // ============================================
-// SCRIPT PRINCIPAL - CORRIGIDO
+// SCRIPT PRINCIPAL - CORRIGIDO COM CARREGAMENTO ASSÍNCRONO
 // ============================================
 
 // ============================================
-// VERIFICAR E IMPORTAR CONFIGURAÇÕES
+// AGUARDAR CONFIG CARREGAR
 // ============================================
-let CONFIG;
-
-try {
-    CONFIG = typeof CONFIG !== 'undefined' ? CONFIG : null;
-} catch (e) {
-    CONFIG = null;
+function waitForConfig() {
+    return new Promise((resolve) => {
+        if (typeof CONFIG !== 'undefined' && CONFIG !== null) {
+            resolve(CONFIG);
+        } else {
+            let attempts = 0;
+            const interval = setInterval(() => {
+                attempts++;
+                if (typeof CONFIG !== 'undefined' && CONFIG !== null) {
+                    clearInterval(interval);
+                    resolve(CONFIG);
+                } else if (attempts > 50) { // 5 segundos máximo
+                    clearInterval(interval);
+                    console.warn('Config não carregou, usando fallback');
+                    resolve(null);
+                }
+            }, 100);
+        }
+    });
+}
+// ============================================
+// INICIALIZAÇÃO PRINCIPAL
+// ============================================
+async function initApp() {
+    console.log('❤️ Iniciando site de amor...');
+    
+    // Aguardar config carregar
+    const configData = await waitForConfig();
+    CONFIG = configData || getFallbackConfig();
+    
+    // Inicializar variáveis com CONFIG
+    initializeVariables();
+    
+    // Carregar estatísticas
+    loadStats();
+    
+    // Inicializar áudio
+    if (CONFIG.settings?.enableMusic !== false) {
+        initAudio();
+    }
+    
+    // Configurar loader
+    setupLoader();
+    
+    // Inicializar contadores
+    updateTimeCounter();
+    setInterval(updateTimeCounter, 1000);
+    
+    // Inicializar quiz
+    if (QUIZ_QUESTIONS && QUIZ_QUESTIONS.length > 0) {
+        initQuiz();
+    }
+    
+    // Inicializar jogo da memória
+    initMemoryGame();
+    
+    // Inicializar calendário
+    renderCalendar();
+    
+    // Inicializar declaração
+    generateDeclaration();
+    
+    // Configurar botão de música
+    setupMusicToggle();
+    
+    // Configurar botão back to top
+    setupBackToTop();
+    
+    // Configurar animações de scroll
+    setupScrollAnimations();
+    
+    // Atualizar playlist UI
+    updatePlaylistUI();
+    
+    // Configurar textarea counter
+    setupTextareaCounter();
+    
+    // Atualizar contador de mensagens
+    updateMessageCount();
+    
+    // Substituir nomes
+    replaceNames();
+    
+    // Inicializar carrossel de memórias
+    if (MEMORIES && MEMORIES.length > 0) {
+        initMemoriesCarousel();
+    }
+    
+    // Inicializar poema do dia
+    if (POEMS && POEMS.length > 0) {
+        initPoemOfTheDay();
+    }
+    
+    // Inicializar notificações
+    if (CONFIG.settings?.enableNotifications !== false) {
+        initNotifications();
+    }
+    
+    // Inicializar wishlist
+    initWishlist();
+    
+    // Atualizar estatísticas
+    updateStats();
+    
+    // Atualizar ano no footer
+    updateFooterYear();
+    
+    // Carregar mensagens salvas
+    loadWallMessages();
+    
+    // Atualizar próximo encontro
+    updateNextDate();
+    setInterval(updateNextDate, 60000);
+    
+    // Iniciar corações flutuantes
+    if (CONFIG.settings?.enableFloatingHearts !== false) {
+        startFloatingHearts();
+    }
+    
+    console.log('❤️ Site carregado com amor! ❤️');
 }
 
-// Fallback completo caso o config não carregue
-if (!CONFIG) {
-    CONFIG = {
+// ============================================
+// INICIALIZAR VARIÁVEIS
+// ============================================
+function initializeVariables() {
+    // Datas
+    START_DATE = CONFIG.couple?.startDate || new Date('2025-09-26T19:30:00');
+    NEXT_DATE = CONFIG.couple?.nextDate || new Date('2026-02-14T20:00:00');
+    NEXT_DATE_DESC = CONFIG.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
+    NEXT_DATE_LOC = CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
+
+    // Nomes
+    YOUR_NAME = CONFIG.couple?.yourName || 'João';
+    LOVER_NAME = CONFIG.couple?.loverName || 'Beatriz';
+    NICKNAMES = CONFIG.couple?.nicknames || ['Meu Amor', 'Princesa', 'Vida', 'Coração'];
+
+    // Conteúdo
+    LOVE_LETTER = CONFIG.loveLetter || '';
+    DECLARATIONS = CONFIG.declarations || [];
+    PLAYLIST = CONFIG.playlist || [];
+    SPECIAL_DATES = CONFIG.specialDates || [];
+    QUIZ_QUESTIONS = CONFIG.quizQuestions || [];
+    MEMORIES = CONFIG.memories || [];
+    POEMS = CONFIG.poems || [];
+    galleryCaptions = CONFIG.galleryCaptions || [];
+    galleryIcons = CONFIG.galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
+    totalImages = galleryIcons.length || 6;
+    WISHLIST = CONFIG.wishlist || [];
+}
+
+// ============================================
+// FALLBACK CONFIG
+// ============================================
+function getFallbackConfig() {
+    return {
         couple: {
             yourName: 'João',
             loverName: 'Beatriz',
@@ -25,76 +170,17 @@ if (!CONFIG) {
             nextDateDescription: 'Dia dos Namorados ❤️',
             nextDateLocation: 'Restaurante Italiano, 20:00'
         },
-        playlist: [
-            { title: "Perfect", artist: "Ed Sheeran", duration: "4:23", cover: "fa-heart" },
-            { title: "Ainda Gosto Dela", artist: "Skank", duration: "4:12", cover: "fa-star" },
-            { title: "Trem Bala", artist: "Ana Vilela", duration: "3:48", cover: "fa-train" },
-            { title: "Deixa Eu Te Amar", artist: "Dilsinho", duration: "3:52", cover: "fa-heartbeat" },
-            { title: "Love Story", artist: "Taylor Swift", duration: "3:55", cover: "fa-moon" },
-            { title: "Quando a Chuva Passar", artist: "Ivete Sangalo", duration: "4:05", cover: "fa-cloud-rain" },
-            { title: "Seu Nome", artist: "NX Zero", duration: "3:58", cover: "fa-feather" },
-            { title: "Só Hoje", artist: "Jota Quest", duration: "3:45", cover: "fa-sun" }
-        ],
-        loveLetter: `Desde aquele 26 de setembro, às 19:30, minha vida ganhou um novo significado. Lembro como se fosse hoje: você chegou com seu sorriso tímido, vestindo aquela blusa rosa, e eu soube ali que nada seria igual.
-
-Beatriz, você não veio ao acaso. Você foi um presente que a vida me deu, desses que a gente nem ousava pedir, mas que o coração sempre desejou em segredo.
-
-Te amo hoje, amanhã e em todas as vidas que existirem. ❤️`,
-        declarations: [
-            "Você é a pessoa mais especial que eu já conheci!",
-            "Meu coração bate mais forte quando penso em ti.",
-            "Cada dia ao teu lado é um presente.",
-            "Você é meu sonho realizado."
-        ],
-        specialDates: [
-            { day: 26, month: 9, year: 2025, description: "🎉 Nosso primeiro encontro" },
-            { day: 10, month: 10, year: 2025, description: "💋 Primeiro beijo" },
-            { day: 1, month: 11, year: 2025, description: "💍 Início do namoro" }
-        ],
-        quizQuestions: [
-            {
-                question: "Qual é a minha comida favorita?",
-                options: ["Pizza", "Hambúrguer", "Lasanha", "Sushi"],
-                correct: 2,
-                funFact: "Lasanha da mamãe é imbatível! 🍝"
-            }
-        ],
-        memories: [
-            { icon: "☕", title: "Primeiro Café", description: "Você derrubou açúcar na mesa e rimos por 10 minutos", date: "26/09/2025" },
-            { icon: "🌹", title: "Primeiro Beijo", description: "A noite mais linda da minha vida", date: "10/10/2025" },
-            { icon: "💍", title: "Pedido de Namoro", description: "O sim mais feliz da minha vida", date: "01/11/2025" }
-        ],
-        poems: [
-            {
-                title: "O Dia que Te Encontrei",
-                verses: [
-                    "O relógio parou às 19:30,",
-                    "Quando seus olhos encontraram os meus.",
-                    "Foi tão simples e tão eterno,",
-                    "Como se a vida inteira tivesse nos esperado."
-                ]
-            }
-        ],
-        galleryCaptions: [
-            "Nosso primeiro encontro - Café Colonial • 26/09/2025 • 19:30",
-            "Nossa primeira viagem - Serra Gaúcha • 10/10/2025 • 14:00",
-            "Seu aniversário - 22/02/2026 • 20:00",
-            "Natal juntos - 25/12/2025 • 20:00",
-            "Ano Novo - 31/12/2025 • 23:59",
-            "Dia dos Namorados - 14/02/2026 • 19:00"
-        ],
+        playlist: [],
+        loveLetter: '',
+        declarations: [],
+        specialDates: [],
+        quizQuestions: [],
+        memories: [],
+        poems: [],
+        galleryCaptions: [],
         galleryIcons: ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'],
-        wishlist: [
-            { icon: "✈️", text: "Viajar para Paris" },
-            { icon: "🍳", text: "Fazer curso de culinária juntos" },
-            { icon: "🏠", text: "Comprar nossa casa" },
-            { icon: "🐕", text: "Adotar um cachorro" },
-            { icon: "🏖️", text: "Viagem para Fernando de Noronha" },
-            { icon: "📸", text: "Ensaio fotográfico do casal" }
-        ],
+        wishlist: [],
         settings: {
-            primaryColor: '#ff4d4d',
-            secondaryColor: '#ff7eb3',
             enableMusic: true,
             enableConfetti: true,
             enableFloatingHearts: true,
@@ -106,7 +192,16 @@ Te amo hoje, amanhã e em todas as vidas que existirem. ❤️`,
 }
 
 // ============================================
-// VARIÁVEIS GLOBAIS (usando CONFIG)
+// INICIAR QUANDO O DOM ESTIVER PRONTO
+// ============================================
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+
+// ============================================
+// VARIÁVEIS GLOBAIS
 // ============================================
 
 // Datas
@@ -130,7 +225,7 @@ const MEMORIES = CONFIG.memories || [];
 const POEMS = CONFIG.poems || [];
 const galleryCaptions = CONFIG.galleryCaptions || [];
 const galleryIcons = CONFIG.galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
-const totalImages = (galleryIcons && galleryIcons.length) ? galleryIcons.length : 6;
+const totalImages = galleryIcons.length || 6;
 const WISHLIST = CONFIG.wishlist || [];
 
 // ============================================
@@ -144,6 +239,7 @@ let audio = null;
 let progressInterval = null;
 let musicInitialized = false;
 let fakeCurrentTime = 0;
+let fakeDuration = 210; // 3:30 em segundos
 
 // Galeria
 let currentImageIndex = 0;
@@ -163,7 +259,6 @@ let moves = 0;
 let memoryTimer = null;
 let seconds = 0;
 let gameStarted = false;
-let gameCompleted = false;
 
 // Estatísticas
 let visitCount = 1;
@@ -231,9 +326,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Atualizar contador de mensagens
     updateMessageCount();
     
-    // Configurar smooth scroll
-    setupSmoothScroll();
-    
     // Substituir nomes
     replaceNames();
     
@@ -246,15 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (POEMS && POEMS.length > 0) {
         initPoemOfTheDay();
     }
-    
-    // Inicializar modo escuro
-    initDarkMode();
-    
-    // Inicializar modo foco
-    initFocusMode();
-    
-    // Configurar atalhos de teclado
-    setupKeyboardShortcuts();
     
     // Inicializar notificações
     if (CONFIG.settings?.enableNotifications !== false) {
@@ -273,9 +356,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Carregar mensagens salvas
     loadWallMessages();
     
-    // Inicializar dicas de amor
-    initLoveTips();
-    
     // Atualizar próximo encontro
     updateNextDate();
     setInterval(updateNextDate, 60000);
@@ -286,9 +366,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     console.log('❤️ Site carregado com amor! ❤️');
-    if (LOVER_NAME) {
-        console.log(`👋 Bem-vinda, ${LOVER_NAME}!`);
-    }
 });
 
 // ============================================
@@ -339,12 +416,24 @@ function initAudio() {
     if (!audio) {
         audio = new Audio();
         audio.id = 'bgMusic';
+        audio.loop = false; // Não repetir automaticamente
         document.body.appendChild(audio);
     }
     
     if (audio) {
         audio.addEventListener('ended', function() {
             nextMusic();
+        });
+        
+        audio.addEventListener('timeupdate', function() {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                const progressBar = document.querySelector('.progress');
+                const currentTimeEl = document.getElementById('currentTime');
+                
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (currentTimeEl) currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
         });
     }
     
@@ -377,8 +466,14 @@ function playMusic(index) {
         return;
     }
     
+    // Parar música atual se estiver tocando
+    if (audio && isPlaying) {
+        audio.pause();
+    }
+    
     currentTrack = index % PLAYLIST.length;
     
+    // Atualizar UI da playlist
     document.querySelectorAll('.playlist-item').forEach((item, i) => {
         if (item) {
             if (i === currentTrack) {
@@ -389,14 +484,30 @@ function playMusic(index) {
         }
     });
     
+    // Carregar nova música
+    if (audio && PLAYLIST[currentTrack].audioUrl) {
+        audio.src = PLAYLIST[currentTrack].audioUrl;
+        audio.load();
+        
+        if (isPlaying) {
+            audio.play().catch(e => {
+                console.log('Autoplay bloqueado:', e);
+                isPlaying = false;
+                updatePlayPauseIcons(false);
+            });
+        }
+    }
+    
     updateMusicInfo(currentTrack);
     
+    // Reset progress
+    const progressBar = document.querySelector('.progress');
+    const currentTimeEl = document.getElementById('currentTime');
+    if (progressBar) progressBar.style.width = '0%';
+    if (currentTimeEl) currentTimeEl.textContent = '0:00';
+    
     if (isPlaying) {
-        stopProgressUpdate();
-        startProgressUpdate();
-        if (PLAYLIST[currentTrack]) {
-            showNotification(`🎵 Tocando: ${PLAYLIST[currentTrack].title}`, 'music');
-        }
+        showNotification(`🎵 Tocando: ${PLAYLIST[currentTrack].title}`, 'music');
     }
 }
 
@@ -406,53 +517,61 @@ function togglePlay() {
         return;
     }
     
-    const playBtn = document.querySelector('.play-pause i');
-    const musicBtn = document.querySelector('#musicToggle i');
+    if (!audio) {
+        initAudio();
+    }
+    
+    if (!audio.src && PLAYLIST[currentTrack]?.audioUrl) {
+        audio.src = PLAYLIST[currentTrack].audioUrl;
+        audio.load();
+    }
     
     if (isPlaying) {
-        if (playBtn) playBtn.className = 'fas fa-play';
-        if (musicBtn) musicBtn.className = 'fas fa-music';
-        stopProgressUpdate();
+        audio.pause();
         showNotification('⏸️ Música pausada', 'info');
     } else {
-        if (playBtn) playBtn.className = 'fas fa-pause';
-        if (musicBtn) musicBtn.className = 'fas fa-pause';
-        startProgressUpdate();
+        audio.play().catch(e => {
+            console.log('Erro ao reproduzir:', e);
+            showNotification('❌ Não foi possível reproduzir a música', 'error');
+        });
         if (PLAYLIST[currentTrack]) {
             showNotification(`🎵 Tocando: ${PLAYLIST[currentTrack].title}`, 'music');
         }
     }
     
     isPlaying = !isPlaying;
+    updatePlayPauseIcons(isPlaying);
 }
 
-function togglePlayDemo() {
+function updatePlayPauseIcons(playing) {
     const playBtn = document.querySelector('.play-pause i');
     const musicBtn = document.querySelector('#musicToggle i');
     
+    if (playBtn) {
+        playBtn.className = playing ? 'fas fa-pause' : 'fas fa-play';
+    }
+    if (musicBtn) {
+        musicBtn.className = playing ? 'fas fa-pause' : 'fas fa-music';
+    }
+}
+
+function togglePlayDemo() {
+    isPlaying = !isPlaying;
+    updatePlayPauseIcons(isPlaying);
+    
     if (isPlaying) {
-        if (playBtn) playBtn.className = 'fas fa-play';
-        if (musicBtn) musicBtn.className = 'fas fa-music';
+        startProgressUpdate();
+        showNotification('🎵 Tocando: modo demonstração', 'music');
+    } else {
         stopProgressUpdate();
         showNotification('⏸️ Música pausada', 'info');
-    } else {
-        if (playBtn) playBtn.className = 'fas fa-pause';
-        if (musicBtn) musicBtn.className = 'fas fa-pause';
-        startProgressUpdate();
-        
-        const trackTitle = (PLAYLIST && PLAYLIST[currentTrack]) ? 
-            PLAYLIST[currentTrack].title : 'Perfect';
-        showNotification(`🎵 Tocando: ${trackTitle}`, 'music');
     }
-    
-    isPlaying = !isPlaying;
 }
 
 function startProgressUpdate() {
     stopProgressUpdate();
     
     fakeCurrentTime = 0;
-    const fakeDuration = 210;
     
     progressInterval = setInterval(() => {
         if (isPlaying) {
@@ -468,11 +587,6 @@ function startProgressUpdate() {
             
             if (progressBar) progressBar.style.width = `${progress}%`;
             if (currentTimeEl) currentTimeEl.textContent = formatTime(fakeCurrentTime);
-            
-            if (PLAYLIST && PLAYLIST[currentTrack]) {
-                const durationEl = document.getElementById('duration');
-                if (durationEl) durationEl.textContent = PLAYLIST[currentTrack].duration;
-            }
         }
     }, 1000);
 }
@@ -516,22 +630,25 @@ function setupMusicToggle() {
 }
 
 function updatePlaylistUI() {
-    const playlistItems = document.querySelectorAll('.playlist-item');
-    playlistItems.forEach((item, index) => {
-        if (item && index < PLAYLIST.length) {
-            const titleEl = item.querySelector('.playlist-title');
-            const artistEl = item.querySelector('.playlist-artist');
-            const durationEl = item.querySelector('.playlist-duration');
-            const iconEl = item.querySelector('i:first-child');
-            
-            if (titleEl) titleEl.textContent = PLAYLIST[index].title;
-            if (artistEl) artistEl.textContent = PLAYLIST[index].artist;
-            if (durationEl) durationEl.textContent = PLAYLIST[index].duration;
-            if (iconEl) {
-                iconEl.className = `fas ${PLAYLIST[index].cover || 'fa-music'}`;
-            }
-        }
+    const playlistContainer = document.querySelector('.playlist');
+    if (!playlistContainer || !PLAYLIST || PLAYLIST.length === 0) return;
+    
+    let html = '<h4>Playlist Romântica</h4>';
+    
+    PLAYLIST.forEach((track, index) => {
+        html += `
+            <div class="playlist-item ${index === currentTrack ? 'active' : ''}" onclick="playMusic(${index})">
+                <i class="fas ${track.cover || 'fa-music'}"></i>
+                <div class="playlist-info">
+                    <span class="playlist-title">${track.title}</span>
+                    <span class="playlist-artist">${track.artist}</span>
+                </div>
+                <span class="playlist-duration">${track.duration}</span>
+            </div>
+        `;
     });
+    
+    playlistContainer.innerHTML = html;
 }
 
 // ============================================
@@ -599,7 +716,6 @@ function openLetter() {
     if (CONFIG.settings?.enableConfetti !== false) {
         createConfetti('letter');
     }
-    localStorage.setItem('letterOpened', 'true');
 }
 
 // ============================================
@@ -1016,7 +1132,6 @@ function loadWallMessages() {
 // ============================================
 
 function initWishlist() {
-    // Criar wishlist dinamicamente se existir no config
     if (WISHLIST && WISHLIST.length > 0) {
         const wishlistContainer = document.querySelector('.wishlist');
         if (wishlistContainer) {
@@ -1227,7 +1342,6 @@ function resetMemoryStats() {
     matchedPairs = 0;
     seconds = 0;
     gameStarted = false;
-    gameCompleted = false;
     
     const moveCountEl = document.getElementById('moveCount');
     const pairCountEl = document.getElementById('pairCount');
@@ -1257,7 +1371,6 @@ function startMemoryTimer() {
 
 function endMemoryGame() {
     clearInterval(memoryTimer);
-    gameCompleted = true;
     
     showNotification(`🎮 Parabéns! Você completou o jogo! ${moves} movimentos, ${seconds}s`, 'win');
     if (CONFIG.settings?.enableConfetti !== false) {
@@ -1355,68 +1468,6 @@ function initPoemOfTheDay() {
         </div>
         <span class="poem-date">Poema do dia ${today.toLocaleDateString('pt-BR')}</span>
     `;
-}
-
-// ============================================
-// MODO ESCURO
-// ============================================
-
-function initDarkMode() {
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    if (!darkModeToggle) return;
-    
-    try {
-        const darkMode = localStorage.getItem('darkMode') === 'true';
-        if (darkMode) {
-            document.body.classList.add('dark-mode');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-    } catch (e) {
-        console.warn('Erro ao carregar modo escuro:', e);
-    }
-    
-    darkModeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        this.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        try {
-            localStorage.setItem('darkMode', isDark);
-        } catch (e) {
-            console.warn('Erro ao salvar modo escuro:', e);
-        }
-        showNotification(isDark ? '🌙 Modo escuro ativado' : '☀️ Modo claro ativado', 'info');
-    });
-}
-
-// ============================================
-// MODO FOCO
-// ============================================
-
-function initFocusMode() {
-    const focusToggle = document.getElementById('focusModeToggle');
-    if (!focusToggle) return;
-    
-    focusToggle.addEventListener('click', function() {
-        document.body.classList.toggle('focus-mode');
-        const isFocus = document.body.classList.contains('focus-mode');
-        this.innerHTML = isFocus ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
-        
-        if (isFocus) {
-            document.querySelectorAll('section:not(.hero):not(.counter-premium)').forEach(el => {
-                if (el) el.style.opacity = '0.3';
-            });
-            const hero = document.querySelector('.hero');
-            const counter = document.querySelector('.counter-premium');
-            if (hero) hero.style.opacity = '1';
-            if (counter) counter.style.opacity = '1';
-            showNotification('🎯 Modo foco ativado - Apenas o essencial', 'info');
-        } else {
-            document.querySelectorAll('section').forEach(el => {
-                if (el) el.style.opacity = '1';
-            });
-            showNotification('🎯 Modo foco desativado', 'info');
-        }
-    });
 }
 
 // ============================================
@@ -1594,11 +1645,6 @@ function openGift() {
             createConfetti('gift');
         }
         showNotification('🎁 Presente aberto! Espero que goste ❤️', 'gift');
-        try {
-            localStorage.setItem('giftOpened', 'true');
-        } catch (e) {
-            console.warn('Erro ao salvar:', e);
-        }
     } else {
         giftContent.classList.add('hidden');
     }
@@ -1632,14 +1678,12 @@ function updateNextDate() {
             planElement.innerHTML = 'HOJE É O GRANDE DIA! 🎉❤️';
             planElement.style.animation = 'pulse 1s infinite';
         }
-        if (locationElement) locationElement.textContent = (CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00') + ' - Estou indo!';
         if (CONFIG.settings?.enableConfetti !== false) {
             createConfetti('date');
         }
     } else if (days === 1) {
         if (daysElement) daysElement.style.color = '#ffa500';
         if (planElement) planElement.innerHTML = 'AMANHÃ! ❤️✨';
-        if (locationElement) locationElement.textContent = (CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00') + ' - Ansioso!';
     }
 }
 
@@ -1694,30 +1738,6 @@ function showNotification(message, type = 'info') {
             setTimeout(() => notif.remove(), 300);
         }
     }, 5000);
-}
-
-// ============================================
-// DICAS DE AMOR
-// ============================================
-
-function initLoveTips() {
-    const tips = [
-        "💡 O segredo do amor não é mudar o outro, mas aceitar e crescer juntos.",
-        "💡 Um 'eu te amo' dito de verdade vale mais que mil palavras jogadas ao vento.",
-        "💡 Os melhores momentos são os mais simples: um café, um abraço, um olhar.",
-        "💡 Amor de verdade não se desgasta com o tempo - se fortalece.",
-        "💡 A felicidade está nas pequenas coisas que fazemos um pelo outro.",
-        "💡 Perdoar é um ato de amor. Esquecer é um ato de sabedoria.",
-        "💡 O amor não é sobre encontrar a pessoa perfeita, mas sobre enxergar a perfeição na pessoa imperfeita.",
-        "💡 Crescer juntos é a maior prova de amor que existe."
-    ];
-    
-    setInterval(() => {
-        if (Math.random() > 0.7) {
-            const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            showNotification(randomTip, 'info');
-        }
-    }, 45000);
 }
 
 // ============================================
@@ -1825,12 +1845,18 @@ function startFloatingHearts() {
 }
 
 // ============================================
-// BOTÃO BACK TO TOP
+// BOTÃO BACK TO TOP CORRIGIDO
 // ============================================
 
 function setupBackToTop() {
     const backToTop = document.getElementById('backToTop');
     if (!backToTop) return;
+    
+    // Posicionar corretamente
+    backToTop.style.position = 'fixed';
+    backToTop.style.bottom = '30px';
+    backToTop.style.right = '30px';
+    backToTop.style.zIndex = '9999';
     
     window.addEventListener('scroll', () => {
         if (window.scrollY > 400) {
@@ -1867,57 +1893,6 @@ function setupScrollAnimations() {
         if (el) {
             el.classList.add('fade-in');
             observer.observe(el);
-        }
-    });
-}
-
-// ============================================
-// SMOOTH SCROLL
-// ============================================
-
-function setupSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-}
-
-// ============================================
-// ATALHOS DE TECLADO
-// ============================================
-
-function setupKeyboardShortcuts() {
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const lightbox = document.getElementById('lightbox');
-            if (lightbox && lightbox.classList.contains('active')) {
-                closeLightbox();
-            }
-        }
-        
-        if (e.key === ' ' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-            e.preventDefault();
-            const musicToggle = document.querySelector('.music-toggle');
-            if (musicToggle) {
-                musicToggle.click();
-            }
-        }
-        
-        const lightbox = document.getElementById('lightbox');
-        if (lightbox && lightbox.classList.contains('active')) {
-            if (e.key === 'ArrowLeft') {
-                changeImage(-1);
-            } else if (e.key === 'ArrowRight') {
-                changeImage(1);
-            }
         }
     });
 }

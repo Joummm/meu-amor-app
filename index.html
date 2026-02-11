@@ -21,9 +21,7 @@
     </div>
 
     <!-- Música de fundo -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="" type="audio/mp3">
-    </audio>
+    <audio id="bgMusic" loop preload="auto"></audio>
 
     <!-- Botões flutuantes -->
     <button id="musicToggle" class="music-toggle">
@@ -35,19 +33,6 @@
         <i class="fas fa-chevron-up"></i>
         <span class="tooltip">Voltar ao topo</span>
     </button>
-
-    <!-- Botões de controle adicionais -->
-    <div class="control-buttons-floating">
-        <button id="darkModeToggle" class="control-btn-floating" title="Modo Escuro/Claro">
-            <i class="fas fa-moon"></i>
-        </button>
-        <button id="focusModeToggle" class="control-btn-floating" title="Modo Foco">
-            <i class="fas fa-expand"></i>
-        </button>
-    </div>
-
-    <!-- Confetes canvas -->
-    <canvas id="confettiCanvas"></canvas>
 
     <!-- Corações flutuantes -->
     <div class="floating-hearts-container"></div>
@@ -72,7 +57,7 @@
                 </div>
             </div>
             <div class="scroll-indicator">
-                <span>Role para continuar</span>
+                <span>Descubra nossa história</span>
                 <i class="fas fa-chevron-down"></i>
             </div>
         </header>
@@ -308,94 +293,27 @@
                         </div>
                         <div class="time-info">
                             <span id="currentTime">0:00</span>
-                            <span id="duration">3:30</span>
+                            <span id="duration">4:23</span>
                         </div>
                     </div>
                 </div>
                 <div class="playlist">
                     <h4>Playlist Romântica</h4>
-                    <div class="playlist-item active" onclick="playMusic(0)">
-                        <i class="fas fa-music"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Perfect</span>
-                            <span class="playlist-artist">Ed Sheeran</span>
-                        </div>
-                        <span class="playlist-duration">4:23</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(1)">
-                        <i class="fas fa-heart"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Ainda Gosto Dela</span>
-                            <span class="playlist-artist">Skank</span>
-                        </div>
-                        <span class="playlist-duration">4:12</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(2)">
-                        <i class="fas fa-star"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Trem Bala</span>
-                            <span class="playlist-artist">Ana Vilela</span>
-                        </div>
-                        <span class="playlist-duration">3:48</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(3)">
-                        <i class="fas fa-infinity"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Deixa Eu Te Amar</span>
-                            <span class="playlist-artist">Dilsinho</span>
-                        </div>
-                        <span class="playlist-duration">3:52</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(4)">
-                        <i class="fas fa-moon"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Love Story</span>
-                            <span class="playlist-artist">Taylor Swift</span>
-                        </div>
-                        <span class="playlist-duration">3:55</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(5)">
-                        <i class="fas fa-cloud-rain"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Quando a Chuva Passar</span>
-                            <span class="playlist-artist">Ivete Sangalo</span>
-                        </div>
-                        <span class="playlist-duration">4:05</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(6)">
-                        <i class="fas fa-feather"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Seu Nome</span>
-                            <span class="playlist-artist">NX Zero</span>
-                        </div>
-                        <span class="playlist-duration">3:58</span>
-                    </div>
-                    <div class="playlist-item" onclick="playMusic(7)">
-                        <i class="fas fa-sun"></i>
-                        <div class="playlist-info">
-                            <span class="playlist-title">Só Hoje</span>
-                            <span class="playlist-artist">Jota Quest</span>
-                        </div>
-                        <span class="playlist-duration">3:45</span>
-                    </div>
+                    <!-- Playlist será preenchida pelo JavaScript -->
                 </div>
             </div>
         </section>
 
-        <!-- Carrossel de Memórias - NOVO -->
+        <!-- Carrossel de Memórias -->
         <section class="memories-section">
             <h2 class="section-title">📸 Memórias que guardo no coração</h2>
-            <div class="memories-carousel">
-                <!-- Preenchido pelo JavaScript -->
-            </div>
+            <div class="memories-carousel"></div>
         </section>
 
-        <!-- Poema do Dia - NOVO -->
+        <!-- Poema do Dia -->
         <section class="poem-section">
             <h2 class="section-title">📖 Poema do Dia</h2>
-            <div class="poem-container">
-                <!-- Preenchido pelo JavaScript -->
-            </div>
+            <div class="poem-container"></div>
         </section>
 
         <!-- Quiz do casal premium -->
@@ -467,64 +385,7 @@
         <section class="wishlist-section">
             <h2 class="section-title">✨ Nossos Sonhos e Planos</h2>
             <div class="wishlist-container">
-                <div class="wishlist">
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish1">
-                        <label for="wish1">
-                            <span class="wish-icon">✈️</span>
-                            <span class="wish-text">Viajar para Paris</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish2">
-                        <label for="wish2">
-                            <span class="wish-icon">🍳</span>
-                            <span class="wish-text">Fazer curso de culinária juntos</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish3">
-                        <label for="wish3">
-                            <span class="wish-icon">🏠</span>
-                            <span class="wish-text">Comprar nossa casa</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish4">
-                        <label for="wish4">
-                            <span class="wish-icon">🐕</span>
-                            <span class="wish-text">Adotar um cachorro</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish5">
-                        <label for="wish5">
-                            <span class="wish-icon">🏖️</span>
-                            <span class="wish-text">Viagem para Fernando de Noronha</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish6">
-                        <label for="wish6">
-                            <span class="wish-icon">📸</span>
-                            <span class="wish-text">Ensaio fotográfico do casal</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish7">
-                        <label for="wish7">
-                            <span class="wish-icon">🎓</span>
-                            <span class="wish-text">Fazer pós-graduação juntos</span>
-                        </label>
-                    </div>
-                    <div class="wishlist-item">
-                        <input type="checkbox" id="wish8">
-                        <label for="wish8">
-                            <span class="wish-icon">🌍</span>
-                            <span class="wish-text">Volta ao mundo</span>
-                        </label>
-                    </div>
-                </div>
+                <div class="wishlist"></div>
                 <div class="wishlist-progress">
                     <div class="progress-header">
                         <span class="progress-title">Sonhos realizados</span>
@@ -753,7 +614,7 @@
             </div>
         </section>
 
-        <!-- Estatísticas do Amor - NOVA -->
+        <!-- Estatísticas do Amor -->
         <section class="stats-section">
             <h2 class="section-title">📊 Nossas Estatísticas</h2>
             <div class="stats-container">
@@ -812,8 +673,8 @@
             </div>
         </footer>
     </div>
-<script src="script.js"></script>
-    <script src="config.js"></script>
     
+    <script src="config.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -25,7 +25,7 @@ const CONFIG = {
     },
 
     // ========================================
-    // 2. PLAYLIST - MÚSICAS CORRIGIDAS
+    // 2. PLAYLIST - MÚSICAS
     // ========================================
     playlist: [
         {
@@ -34,8 +34,7 @@ const CONFIG = {
             duration: "4:23",
             cover: "fa-heart",
             year: 2017,
-            url: "https://www.youtube.com/watch?v=2Vv-BfVoq4g", // Link para referência
-            spotifyUrl: "spotify:track:0tgVpDi06FyKpA1z0VMD4v"   // Spotify ID
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         },
         {
             title: "Ainda Gosto Dela",
@@ -43,8 +42,7 @@ const CONFIG = {
             duration: "4:12",
             cover: "fa-star",
             year: 2014,
-            url: "https://www.youtube.com/watch?v=qbOyUZUMlZ0",
-            spotifyUrl: "spotify:track:1FJg1m6pWs4vyj3Cx3LqlX"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
         },
         {
             title: "Trem Bala",
@@ -52,8 +50,7 @@ const CONFIG = {
             duration: "3:48",
             cover: "fa-train",
             year: 2016,
-            url: "https://www.youtube.com/watch?v=z04w5E6Y6xk",
-            spotifyUrl: "spotify:track:2LsKGXoYTC8kAKxO45vz5h"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
         },
         {
             title: "Deixa Eu Te Amar",
@@ -61,8 +58,7 @@ const CONFIG = {
             duration: "3:52",
             cover: "fa-heartbeat",
             year: 2018,
-            url: "https://www.youtube.com/watch?v=-hWEYgKvU0I",
-            spotifyUrl: "spotify:track:1oQkSaRSIh74MppYbTuy5c"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
         },
         {
             title: "Love Story",
@@ -70,8 +66,7 @@ const CONFIG = {
             duration: "3:55",
             cover: "fa-moon",
             year: 2008,
-            url: "https://www.youtube.com/watch?v=8xg3vE8Ie_E",
-            spotifyUrl: "spotify:track:1vrd6UOGamcKNGnSHJQlSt"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
         },
         {
             title: "Quando a Chuva Passar",
@@ -79,8 +74,7 @@ const CONFIG = {
             duration: "4:05",
             cover: "fa-cloud-rain",
             year: 2010,
-            url: "https://www.youtube.com/watch?v=YwD_PW2exV4",
-            spotifyUrl: "spotify:track:2uVl21wVuQqoYx6rYz0i9v"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"
         },
         {
             title: "Seu Nome",
@@ -88,8 +82,7 @@ const CONFIG = {
             duration: "3:58",
             cover: "fa-feather",
             year: 2008,
-            url: "https://www.youtube.com/watch?v=2SdGkk2iMyM",
-            spotifyUrl: "spotify:track:49nFrRimcE2qE0ItDqkR86"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"
         },
         {
             title: "Só Hoje",
@@ -97,18 +90,15 @@ const CONFIG = {
             duration: "3:45",
             cover: "fa-sun",
             year: 2003,
-            url: "https://www.youtube.com/watch?v=kz5Jz5zRRTI",
-            spotifyUrl: "spotify:track:2uR8sQLBx0r65vY3M3JodC"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
         },
-        // NOVAS MÚSICAS ADICIONADAS
         {
             title: "Trevo (Tu)",
             artist: "Anavitória ft. Tiago Iorc",
             duration: "4:01",
             cover: "fa-leaf",
             year: 2016,
-            url: "https://www.youtube.com/watch?v=4J_gZg6F96g",
-            spotifyUrl: "spotify:track:3X4KutsR4jRc9rupEKcTNt"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
         },
         {
             title: "Apenas Mais uma de Amor",
@@ -116,8 +106,7 @@ const CONFIG = {
             duration: "3:54",
             cover: "fa-music",
             year: 1991,
-            url: "https://www.youtube.com/watch?v=YfReFm8O_Q4",
-            spotifyUrl: "spotify:track:6V7EobHXkhNpI2kRgIzNQS"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
         },
         {
             title: "Vamos Pra Rua",
@@ -125,8 +114,7 @@ const CONFIG = {
             duration: "3:55",
             cover: "fa-heart",
             year: 2019,
-            url: "https://www.youtube.com/watch?v=AYXh4E2o1pI",
-            spotifyUrl: "spotify:track:5v0OqW7Gv1PkaOhKKBBY85"
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3"
         }
     ],
 
