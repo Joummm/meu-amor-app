@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nosso Amor Eterno ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader-wrapper">
+        <div class="loader">
+            <div class="heart-loader">❤️</div>
+            <div class="loader-text">Carregando nosso amor...</div>
+        </div>
+    </div>
+
+    <!-- Música de fundo -->
+    <audio id="bgMusic" loop>
+        <source src="sua-musica.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Botão de música -->
+    <button id="musicToggle" class="music-toggle">
+        <i class="fas fa-music"></i>
+    </button>
+
+    <!-- Confetes container -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Corações flutuantes -->
+    <div class="floating-hearts-container"></div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <!-- Header com animação -->
+        <header class="hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <span class="greeting">Para você, meu amor ❤️</span>
+                <h1 class="hero-title">Feliz Dia dos Namorados!</h1>
+                <div class="hero-subtitle">Nossa história de amor</div>
+                <div class="hero-decoration">
+                    <span>✨</span>
+                    <span>❤️</span>
+                    <span>✨</span>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span>Role para ver mais</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </header>
+
+        <!-- Timeline do amor -->
+        <section class="timeline-section">
+            <h2 class="section-title">📅 Nossa Linha do Tempo</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Primeiro Encontro</div>
+                    <div class="timeline-content">
+                        <h3>O dia que tudo começou</h3>
+                        <p>Quando nossos olhos se encontraram...</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Primeiro Beijo</div>
+                    <div class="timeline-content">
+                        <h3>O momento mágico</h3>
+                        <p>O dia que o tempo parou</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Namoro</div>
+                    <div class="timeline-content">
+                        <h3>Sim, eu aceito!</h3>
+                        <p>O melhor sim da minha vida</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeria de fotos interativa -->
+        <section class="gallery-section">
+            <h2 class="section-title">📸 Nossos Momentos</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(0)">
+                        <span class="gallery-icon">❤️</span>
+                    </div>
+                    <p class="gallery-caption">Nosso primeiro date</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(1)">
+                        <span class="gallery-icon">❤️</span>
+                    </div>
+                    <p class="gallery-caption">Viagem inesquecível</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(2)">
+                        <span class="gallery-icon">❤️</span>
+                    </div>
+                    <p class="gallery-caption">Dia especial</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(3)">
+                        <span class="gallery-icon">❤️</span>
+                    </div>
+                    <p class="gallery-caption">Nós dois</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(4)">
+                        <span class="gallery-icon">❤️</span>
+                    </div>
+                    <p class="gallery-caption">Momento feliz</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" onclick="openLightbox(5)">
+                        <span class="gallery-icon">❤️</span>
+                    </div>
+                    <p class="gallery-caption">Te amo</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox para fotos -->
+        <div id="lightbox" class="lightbox">
+            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+            <div class="lightbox-content">
+                <div class="lightbox-image"></div>
+                <button class="lightbox-prev" onclick="changeImage(-1)">❮</button>
+                <button class="lightbox-next" onclick="changeImage(1)">❯</button>
+            </div>
+        </div>
+
+        <!-- Contador de tempo premium -->
+        <section class="counter-premium">
+            <div class="counter-backdrop"></div>
+            <div class="counter-content">
+                <h2>⏰ Tempo ao seu lado</h2>
+                <div class="counter-grid">
+                    <div class="counter-block">
+                        <span class="counter-number" id="years">00</span>
+                        <span class="counter-label">Anos</span>
+                    </div>
+                    <div class="counter-block">
+                        <span class="counter-number" id="months">00</span>
+                        <span class="counter-label">Meses</span>
+                    </div>
+                    <div class="counter-block">
+                        <span class="counter-number" id="days">00</span>
+                        <span class="counter-label">Dias</span>
+                    </div>
+                    <div class="counter-block">
+                        <span class="counter-number" id="hours">00</span>
+                        <span class="counter-label">Horas</span>
+                    </div>
+                    <div class="counter-block">
+                        <span class="counter-number" id="minutes">00</span>
+                        <span class="counter-label">Minutos</span>
+                    </div>
+                    <div class="counter-block">
+                        <span class="counter-number" id="seconds">00</span>
+                        <span class="counter-label">Segundos</span>
+                    </div>
+                </div>
+                <div class="counter-message">
+                    <span id="totalDays"></span> dias de pura felicidade
+                </div>
+            </div>
+        </section>
+
+        <!-- Carta de amor interativa -->
+        <section class="love-letter-section">
+            <h2 class="section-title">💌 Carta de Amor</h2>
+            <div class="love-letter">
+                <div class="envelope" onclick="openLetter()">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-body">
+                        <i class="fas fa-envelope"></i>
+                        <span>Clique para abrir</span>
+                    </div>
+                </div>
+                <div id="letterContent" class="letter-content hidden">
+                    <div class="letter-paper">
+                        <h3>Meu amor,</h3>
+                        <p id="loveLetterText"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Player de música personalizado -->
+        <section class="playlist-section">
+            <h2 class="section-title">🎵 Nossa Trilha Sonora</h2>
+            <div class="music-player">
+                <div class="player-card">
+                    <div class="album-art">
+                        <i class="fas fa-heart music-icon"></i>
+                    </div>
+                    <div class="music-info">
+                        <h4>Nossa Música</h4>
+                        <p>Artista favorito</p>
+                    </div>
+                    <div class="player-controls">
+                        <button class="control-btn" onclick="prevMusic()"><i class="fas fa-backward"></i></button>
+                        <button class="control-btn play-pause" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+                        <button class="control-btn" onclick="nextMusic()"><i class="fas fa-forward"></i></button>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+                <div class="playlist">
+                    <div class="playlist-item active" onclick="playMusic(0)">
+                        <i class="fas fa-music"></i>
+                        <span>Música 1 - Artista</span>
+                    </div>
+                    <div class="playlist-item" onclick="playMusic(1)">
+                        <i class="fas fa-music"></i>
+                        <span>Música 2 - Artista</span>
+                    </div>
+                    <div class="playlist-item" onclick="playMusic(2)">
+                        <i class="fas fa-music"></i>
+                        <span>Música 3 - Artista</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz do casal -->
+        <section class="quiz-section">
+            <h2 class="section-title">❓ Quanto você me conhece?</h2>
+            <div class="quiz-container">
+                <div class="quiz-card">
+                    <div class="quiz-header">
+                        <span class="quiz-question-number">Pergunta 1/5</span>
+                        <span class="quiz-score">❤️ 0 pontos</span>
+                    </div>
+                    <div class="quiz-question">
+                        <h3>Qual é a minha comida favorita?</h3>
+                    </div>
+                    <div class="quiz-options">
+                        <button class="quiz-option">Pizza</button>
+                        <button class="quiz-option">Hambúrguer</button>
+                        <button class="quiz-option">Lasanha</button>
+                        <button class="quiz-option">Sushi</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mural de recados -->
+        <section class="wall-section">
+            <h2 class="section-title">📝 Mural de Mensagens</h2>
+            <div class="wall-container">
+                <div class="wall-messages" id="wallMessages">
+                    <div class="wall-message">
+                        <div class="message-author">❤️ Você</div>
+                        <p>Você é o amor da minha vida!</p>
+                        <span class="message-date">Hoje</span>
+                    </div>
+                </div>
+                <div class="wall-form">
+                    <textarea id="wallInput" placeholder="Deixe uma mensagem de amor..." rows="3"></textarea>
+                    <button onclick="addWallMessage()" class="wall-btn">
+                        <i class="fas fa-heart"></i> Publicar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lista de desejos do casal -->
+        <section class="wishlist-section">
+            <h2 class="section-title">✨ Nossos Sonhos</h2>
+            <div class="wishlist">
+                <div class="wishlist-item">
+                    <input type="checkbox" id="wish1">
+                    <label for="wish1">Viajar para Paris</label>
+                </div>
+                <div class="wishlist-item">
+                    <input type="checkbox" id="wish2">
+                    <label for="wish2">Fazer um curso juntos</label>
+                </div>
+                <div class="wishlist-item">
+                    <input type="checkbox" id="wish3">
+                    <label for="wish3">Aprender a cozinhar</label>
+                </div>
+                <div class="wishlist-item">
+                    <input type="checkbox" id="wish4">
+                    <label for="wish4">Comprar nossa casa</label>
+                </div>
+                <div class="wishlist-item">
+                    <input type="checkbox" id="wish5">
+                    <label for="wish5">Fazer uma viagem de moto</label>
+                </div>
+            </div>
+            <div class="wishlist-progress">
+                <div class="progress-text">0% dos sonhos realizados</div>
+                <div class="progress-bar-wish">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jogo da memória do amor -->
+        <section class="memory-game-section">
+            <h2 class="section-title">🧠 Jogo da Memória</h2>
+            <div class="memory-game-container">
+                <div class="memory-game">
+                    <div class="memory-card" data-card="1">
+                        <div class="memory-card-front">❤️</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="1">
+                        <div class="memory-card-front">❤️</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="2">
+                        <div class="memory-card-front">✨</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="2">
+                        <div class="memory-card-front">✨</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="3">
+                        <div class="memory-card-front">🎵</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="3">
+                        <div class="memory-card-front">🎵</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="4">
+                        <div class="memory-card-front">🌹</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                    <div class="memory-card" data-card="4">
+                        <div class="memory-card-front">🌹</div>
+                        <div class="memory-card-back">?</div>
+                    </div>
+                </div>
+                <button class="reset-game" onclick="resetMemoryGame()">Novo Jogo</button>
+            </div>
+        </section>
+
+        <!-- Previsão do tempo romântica -->
+        <section class="weather-section">
+            <h2 class="section-title">☀️ Previsão do nosso amor</h2>
+            <div class="weather-card">
+                <div class="weather-icon">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="weather-info">
+                    <div class="weather-temp">Infinito ❤️</div>
+                    <div class="weather-desc">Amor eterno</div>
+                    <div class="weather-details">
+                        <span><i class="fas fa-heart"></i> 100% carinho</span>
+                        <span><i class="fas fa-smile"></i> 100% felicidade</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendário de datas especiais -->
+        <section class="calendar-section">
+            <h2 class="section-title">📅 Datas Especiais</h2>
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button onclick="prevMonth()"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="monthYear">Fevereiro 2026</h3>
+                    <button onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-weekdays">
+                    <div>Dom</div>
+                    <div>Seg</div>
+                    <div>Ter</div>
+                    <div>Qua</div>
+                    <div>Qui</div>
+                    <div>Sex</div>
+                    <div>Sáb</div>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+            </div>
+        </section>
+
+        <!-- Mapa do amor -->
+        <section class="map-section">
+            <h2 class="section-title">🗺️ Lugares especiais</h2>
+            <div id="loveMap" class="love-map">
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>Onde nosso amor aconteceu</p>
+                    <div class="map-points">
+                        <span class="map-point">📍 Primeiro encontro</span>
+                        <span class="map-point">📍 Primeiro beijo</span>
+                        <span class="map-point">📍 Nosso lugar</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gerador de declarações -->
+        <section class="declaration-section">
+            <h2 class="section-title">💭 Gerador de Declarações</h2>
+            <div class="declaration-container">
+                <div id="declarationText" class="declaration-text">
+                    Você é a pessoa mais especial do mundo!
+                </div>
+                <button onclick="generateDeclaration()" class="declaration-btn">
+                    <i class="fas fa-magic"></i> Nova declaração
+                </button>
+            </div>
+        </section>
+
+        <!-- Presente surpresa -->
+        <section class="gift-section">
+            <h2 class="section-title">🎁 Presente Especial</h2>
+            <div class="gift-box" onclick="openGift()">
+                <div class="gift-lid"></div>
+                <div class="gift-body">
+                    <div class="gift-ribbon"></div>
+                </div>
+                <div id="giftContent" class="gift-content hidden">
+                    <h3>Este é seu presente! 🎀</h3>
+                    <p>Um dia especial com você é o melhor presente que eu poderia pedir.</p>
+                    <div class="gift-code">AMOR-ETERN0-2026</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contador regressivo para o próximo encontro -->
+        <section class="next-date-section">
+            <h2 class="section-title">⏳ Próximo encontro</h2>
+            <div class="next-date-counter">
+                <div class="next-date-number" id="nextDateDays">00</div>
+                <div class="next-date-label">dias para nosso próximo momento juntos</div>
+                <div class="next-date-plan" id="nextDatePlan">Dia dos Namorados</div>
+            </div>
+        </section>
+
+        <!-- Footer romântico -->
+        <footer class="romantic-footer">
+            <div class="footer-content">
+                <div class="footer-heart">❤️</div>
+                <p>Feito com amor especialmente para você</p>
+                <div class="footer-signature">Para sempre, [Seu nome]</div>
+                <div class="footer-date">Dia dos Namorados 2026</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
