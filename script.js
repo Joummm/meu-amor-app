@@ -1,128 +1,127 @@
 // ============================================
-// SCRIPT PRINCIPAL - CORRIGIDO COM CARREGAMENTO ASSÍNCRONO
+// SCRIPT PRINCIPAL - CORRIGIDO
 // ============================================
 
 // ============================================
-// AGUARDAR CONFIG CARREGAR
+// VARIÁVEIS GLOBAIS
 // ============================================
-function waitForConfig() {
-    return new Promise((resolve) => {
-        if (typeof CONFIG !== 'undefined' && CONFIG !== null) {
-            resolve(CONFIG);
-        } else {
-            let attempts = 0;
-            const interval = setInterval(() => {
-                attempts++;
-                if (typeof CONFIG !== 'undefined' && CONFIG !== null) {
-                    clearInterval(interval);
-                    resolve(CONFIG);
-                } else if (attempts > 50) { // 5 segundos máximo
-                    clearInterval(interval);
-                    console.warn('Config não carregou, usando fallback');
-                    resolve(null);
-                }
-            }, 100);
-        }
-    });
-}
+let START_DATE, NEXT_DATE, NEXT_DATE_DESC, NEXT_DATE_LOC;
+let YOUR_NAME, LOVER_NAME, NICKNAMES;
+let LOVE_LETTER, DECLARATIONS, PLAYLIST, SPECIAL_DATES, QUIZ_QUESTIONS, MEMORIES, POEMS, galleryCaptions, WISHLIST, GALLERY_IMAGES;
+let totalImages = 6;
+
+// Variáveis de estado
+let isPlaying = false;
+let currentTrack = 0;
+let audio = null;
+let progressInterval = null;
+let musicInitialized = false;
+let fakeCurrentTime = 0;
+let fakeDuration = 210;
+
+let currentImageIndex = 0;
+let currentQuestion = 0;
+let score = 0;
+let quizAnswered = false;
+let quizCompleted = false;
+
+let hasFlippedCard = false;
+let lockBoard = false;
+let firstCard, secondCard;
+let matchedPairs = 0;
+let moves = 0;
+let memoryTimer = null;
+let seconds = 0;
+let gameStarted = false;
+
+let visitCount = 1;
+let lastVisit = new Date();
+let messagesCount = 1;
+let wishesCompleted = 0;
+let totalQuizScore = 0;
+
+let currentDate = new Date();
+let currentMonth = currentDate.getMonth();
+let currentYear = currentDate.getFullYear();
+
+// Debug - verificar se config.js carregou
+console.log('🔍 Verificando CONFIG...');
+console.log('Window CONFIG:', window.CONFIG);
+console.log('Tipo de CONFIG:', typeof window.CONFIG);
+
 // ============================================
 // INICIALIZAÇÃO PRINCIPAL
 // ============================================
-async function initApp() {
+function initApp() {
     console.log('❤️ Iniciando site de amor...');
     
-    // Aguardar config carregar
-    const configData = await waitForConfig();
-    CONFIG = configData || getFallbackConfig();
+    // Verificar se CONFIG está disponível globalmente
+    if (typeof window.CONFIG !== 'undefined' && window.CONFIG !== null) {
+        CONFIG = window.CONFIG;
+        console.log('✅ Configurações carregadas com sucesso!');
+        console.log('👤 Casal:', CONFIG.couple?.yourName, 'e', CONFIG.couple?.loverName);
+    } else {
+        console.error('❌ CONFIG não encontrado! Verifique:');
+        console.error('1. O arquivo config.js existe na mesma pasta');
+        console.error('2. Não há erros de sintaxe no config.js');
+        console.error('3. A ordem dos scripts no HTML está correta (config.js antes de script.js)');
+        console.warn('⚠️ Usando configurações de fallback...');
+        CONFIG = getFallbackConfig();
+    }
     
-    // Inicializar variáveis com CONFIG
     initializeVariables();
-    
-    // Carregar estatísticas
     loadStats();
     
-    // Inicializar áudio
     if (CONFIG.settings?.enableMusic !== false) {
         initAudio();
     }
     
-    // Configurar loader
     setupLoader();
-    
-    // Inicializar contadores
     updateTimeCounter();
     setInterval(updateTimeCounter, 1000);
     
-    // Inicializar quiz
     if (QUIZ_QUESTIONS && QUIZ_QUESTIONS.length > 0) {
         initQuiz();
     }
     
-    // Inicializar jogo da memória
     initMemoryGame();
-    
-    // Inicializar calendário
     renderCalendar();
-    
-    // Inicializar declaração
     generateDeclaration();
-    
-    // Configurar botão de música
     setupMusicToggle();
-    
-    // Configurar botão back to top
     setupBackToTop();
-    
-    // Configurar animações de scroll
     setupScrollAnimations();
-    
-    // Atualizar playlist UI
     updatePlaylistUI();
-    
-    // Configurar textarea counter
     setupTextareaCounter();
-    
-    // Atualizar contador de mensagens
     updateMessageCount();
-    
-    // Substituir nomes
     replaceNames();
     
-    // Inicializar carrossel de memórias
     if (MEMORIES && MEMORIES.length > 0) {
         initMemoriesCarousel();
     }
     
-    // Inicializar poema do dia
     if (POEMS && POEMS.length > 0) {
         initPoemOfTheDay();
     }
     
-    // Inicializar notificações
     if (CONFIG.settings?.enableNotifications !== false) {
         initNotifications();
     }
     
-    // Inicializar wishlist
     initWishlist();
-    
-    // Atualizar estatísticas
     updateStats();
-    
-    // Atualizar ano no footer
     updateFooterYear();
-    
-    // Carregar mensagens salvas
     loadWallMessages();
-    
-    // Atualizar próximo encontro
     updateNextDate();
     setInterval(updateNextDate, 60000);
     
-    // Iniciar corações flutuantes
     if (CONFIG.settings?.enableFloatingHearts !== false) {
         startFloatingHearts();
     }
+    
+    // Carregar galeria após verificar imagens
+    setTimeout(() => {
+        loadGallery();
+    }, 100);
     
     console.log('❤️ Site carregado com amor! ❤️');
 }
@@ -131,18 +130,18 @@ async function initApp() {
 // INICIALIZAR VARIÁVEIS
 // ============================================
 function initializeVariables() {
-    // Datas
-    START_DATE = CONFIG.couple?.startDate || new Date('2025-09-26T19:30:00');
-    NEXT_DATE = CONFIG.couple?.nextDate || new Date('2026-02-14T20:00:00');
+    if (!CONFIG) {
+        CONFIG = getFallbackConfig();
+    }
+    
+    START_DATE = CONFIG.couple?.startDate || new Date('2025-09-26');
+    NEXT_DATE = CONFIG.couple?.nextDate || new Date('2026-02-14');
     NEXT_DATE_DESC = CONFIG.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
-    NEXT_DATE_LOC = CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
 
-    // Nomes
     YOUR_NAME = CONFIG.couple?.yourName || 'João';
     LOVER_NAME = CONFIG.couple?.loverName || 'Beatriz';
     NICKNAMES = CONFIG.couple?.nicknames || ['Meu Amor', 'Princesa', 'Vida', 'Coração'];
 
-    // Conteúdo
     LOVE_LETTER = CONFIG.loveLetter || '';
     DECLARATIONS = CONFIG.declarations || [];
     PLAYLIST = CONFIG.playlist || [];
@@ -151,9 +150,9 @@ function initializeVariables() {
     MEMORIES = CONFIG.memories || [];
     POEMS = CONFIG.poems || [];
     galleryCaptions = CONFIG.galleryCaptions || [];
-    galleryIcons = CONFIG.galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
-    totalImages = galleryIcons.length || 6;
     WISHLIST = CONFIG.wishlist || [];
+    GALLERY_IMAGES = CONFIG.galleryImages || [];
+    totalImages = GALLERY_IMAGES.length || 6;
 }
 
 // ============================================
@@ -165,213 +164,71 @@ function getFallbackConfig() {
             yourName: 'João',
             loverName: 'Beatriz',
             nicknames: ['Meu Amor', 'Princesa', 'Vida', 'Coração'],
-            startDate: new Date('2025-09-26T19:30:00'),
-            nextDate: new Date('2026-02-14T20:00:00'),
+            startDate: new Date('2025-09-26'),
+            nextDate: new Date('2026-02-14'),
             nextDateDescription: 'Dia dos Namorados ❤️',
-            nextDateLocation: 'Restaurante Italiano, 20:00'
         },
         playlist: [],
-        loveLetter: '',
-        declarations: [],
-        specialDates: [],
-        quizQuestions: [],
-        memories: [],
-        poems: [],
-        galleryCaptions: [],
-        galleryIcons: ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'],
-        wishlist: [],
+        loveLetter: 'Minha amada Beatriz, escrevo esta carta para declarar todo meu amor por você...',
+        declarations: [
+            "Você é a pessoa mais especial que eu já conheci!",
+            "Meu coração bate mais forte quando penso em ti."
+        ],
+        specialDates: [
+            { day: 26, month: 9, year: 2025, description: "🎉 Nosso primeiro encontro" },
+            { day: 14, month: 2, year: 2026, description: "💕 Dia dos Namorados" }
+        ],
+        quizQuestions: [
+            {
+                question: "Qual é a minha comida favorita?",
+                options: ["Pizza", "Hambúrguer", "Lasanha", "Sushi"],
+                correct: 2,
+                funFact: "Lasanha é a melhor!"
+            }
+        ],
+        memories: [
+            { icon: "☕", title: "Primeiro Café", description: "Um dia inesquecível", date: "26/09/2025" }
+        ],
+        poems: [
+            {
+                title: "Meu Amor",
+                verses: ["Você é a razão do meu sorriso", "Meu porto seguro", "Meu eterno amor"]
+            }
+        ],
+        galleryCaptions: [
+            "Nosso primeiro encontro - 26/09/2025",
+            "Nossa primeira viagem - 10/10/2025",
+            "Seu aniversário - 22/02/2026",
+            "Natal juntos - 25/12/2025",
+            "Ano Novo - 31/12/2025",
+            "Dia dos Namorados - 14/02/2026"
+        ],
+        galleryImages: [
+            'imagens/beapequena.jpg',
+            'imagens/viagem.jpg',
+            'imagens/aniversario.jpg',
+            'imagens/natal.jpg',
+            'imagens/ano-novo.jpg',
+            'imagens/namorados.jpg'
+        ],
+        wishlist: [
+            { icon: "✈️", text: "Viajar para Paris" },
+            { icon: "🏠", text: "Comprar nossa casa" }
+        ],
         settings: {
             enableMusic: true,
             enableConfetti: true,
             enableFloatingHearts: true,
             enableNotifications: true,
             loaderMessage: 'Carregando nossa história de amor...',
-            loaderSubmessage: 'Para você, Beatriz'
+            loaderSubmessage: 'Para você, meu amor'
         }
     };
 }
 
 // ============================================
-// INICIAR QUANDO O DOM ESTIVER PRONTO
-// ============================================
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-} else {
-    initApp();
-}
-
-// ============================================
-// VARIÁVEIS GLOBAIS
-// ============================================
-
-// Datas
-const START_DATE = CONFIG.couple?.startDate || new Date('2025-09-26T19:30:00');
-const NEXT_DATE = CONFIG.couple?.nextDate || new Date('2026-02-14T20:00:00');
-const NEXT_DATE_DESC = CONFIG.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
-const NEXT_DATE_LOC = CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
-
-// Nomes
-const YOUR_NAME = CONFIG.couple?.yourName || 'João';
-const LOVER_NAME = CONFIG.couple?.loverName || 'Beatriz';
-const NICKNAMES = CONFIG.couple?.nicknames || ['Meu Amor', 'Princesa', 'Vida', 'Coração'];
-
-// Conteúdo
-const LOVE_LETTER = CONFIG.loveLetter || '';
-const DECLARATIONS = CONFIG.declarations || [];
-const PLAYLIST = CONFIG.playlist || [];
-const SPECIAL_DATES = CONFIG.specialDates || [];
-const QUIZ_QUESTIONS = CONFIG.quizQuestions || [];
-const MEMORIES = CONFIG.memories || [];
-const POEMS = CONFIG.poems || [];
-const galleryCaptions = CONFIG.galleryCaptions || [];
-const galleryIcons = CONFIG.galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
-const totalImages = galleryIcons.length || 6;
-const WISHLIST = CONFIG.wishlist || [];
-
-// ============================================
-// VARIÁVEIS DE ESTADO
-// ============================================
-
-// Player de música
-let isPlaying = false;
-let currentTrack = 0;
-let audio = null;
-let progressInterval = null;
-let musicInitialized = false;
-let fakeCurrentTime = 0;
-let fakeDuration = 210; // 3:30 em segundos
-
-// Galeria
-let currentImageIndex = 0;
-
-// Quiz
-let currentQuestion = 0;
-let score = 0;
-let quizAnswered = false;
-let quizCompleted = false;
-
-// Jogo da memória
-let hasFlippedCard = false;
-let lockBoard = false;
-let firstCard, secondCard;
-let matchedPairs = 0;
-let moves = 0;
-let memoryTimer = null;
-let seconds = 0;
-let gameStarted = false;
-
-// Estatísticas
-let visitCount = 1;
-let lastVisit = new Date();
-let messagesCount = 1;
-let wishesCompleted = 0;
-let totalQuizScore = 0;
-
-// Calendário
-let currentDate = new Date();
-let currentMonth = currentDate.getMonth();
-let currentYear = currentDate.getFullYear();
-
-// ============================================
-// INICIALIZAÇÃO
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('❤️ Iniciando site de amor...');
-    
-    // Carregar estatísticas
-    loadStats();
-    
-    // Inicializar áudio
-    if (CONFIG.settings?.enableMusic !== false) {
-        initAudio();
-    }
-    
-    // Configurar loader
-    setupLoader();
-    
-    // Inicializar contadores
-    updateTimeCounter();
-    setInterval(updateTimeCounter, 1000);
-    
-    // Inicializar quiz
-    if (QUIZ_QUESTIONS && QUIZ_QUESTIONS.length > 0) {
-        initQuiz();
-    }
-    
-    // Inicializar jogo da memória
-    initMemoryGame();
-    
-    // Inicializar calendário
-    renderCalendar();
-    
-    // Inicializar declaração
-    generateDeclaration();
-    
-    // Configurar botão de música
-    setupMusicToggle();
-    
-    // Configurar botão back to top
-    setupBackToTop();
-    
-    // Configurar animações de scroll
-    setupScrollAnimations();
-    
-    // Atualizar playlist UI
-    updatePlaylistUI();
-    
-    // Configurar textarea counter
-    setupTextareaCounter();
-    
-    // Atualizar contador de mensagens
-    updateMessageCount();
-    
-    // Substituir nomes
-    replaceNames();
-    
-    // Inicializar carrossel de memórias
-    if (MEMORIES && MEMORIES.length > 0) {
-        initMemoriesCarousel();
-    }
-    
-    // Inicializar poema do dia
-    if (POEMS && POEMS.length > 0) {
-        initPoemOfTheDay();
-    }
-    
-    // Inicializar notificações
-    if (CONFIG.settings?.enableNotifications !== false) {
-        initNotifications();
-    }
-    
-    // Inicializar wishlist
-    initWishlist();
-    
-    // Atualizar estatísticas
-    updateStats();
-    
-    // Atualizar ano no footer
-    updateFooterYear();
-    
-    // Carregar mensagens salvas
-    loadWallMessages();
-    
-    // Atualizar próximo encontro
-    updateNextDate();
-    setInterval(updateNextDate, 60000);
-    
-    // Iniciar corações flutuantes
-    if (CONFIG.settings?.enableFloatingHearts !== false) {
-        startFloatingHearts();
-    }
-    
-    console.log('❤️ Site carregado com amor! ❤️');
-});
-
-// ============================================
 // LOADER
 // ============================================
-
 function setupLoader() {
     const loader = document.querySelector('.loader-wrapper');
     const loaderText = document.querySelector('.loader-text');
@@ -398,7 +255,7 @@ function setupLoader() {
         }
         
         if (loaderText) {
-            loaderText.textContent = `${CONFIG.settings?.loaderMessage || 'Carregando nossa história...'} ${Math.floor(progress)}%`;
+            loaderText.textContent = `${CONFIG?.settings?.loaderMessage || 'Carregando a nossa história...'} ${Math.floor(progress)}%`;
         }
         if (loaderSubtext && progress > 70) {
             loaderSubtext.textContent = 'Quase lá, amor! 💕';
@@ -407,16 +264,15 @@ function setupLoader() {
 }
 
 // ============================================
-// ÁUDIO CORRIGIDO
+// ÁUDIO
 // ============================================
-
 function initAudio() {
     audio = document.getElementById('bgMusic');
     
     if (!audio) {
         audio = new Audio();
         audio.id = 'bgMusic';
-        audio.loop = false; // Não repetir automaticamente
+        audio.loop = false;
         document.body.appendChild(audio);
     }
     
@@ -466,14 +322,12 @@ function playMusic(index) {
         return;
     }
     
-    // Parar música atual se estiver tocando
     if (audio && isPlaying) {
         audio.pause();
     }
     
     currentTrack = index % PLAYLIST.length;
     
-    // Atualizar UI da playlist
     document.querySelectorAll('.playlist-item').forEach((item, i) => {
         if (item) {
             if (i === currentTrack) {
@@ -484,7 +338,6 @@ function playMusic(index) {
         }
     });
     
-    // Carregar nova música
     if (audio && PLAYLIST[currentTrack].audioUrl) {
         audio.src = PLAYLIST[currentTrack].audioUrl;
         audio.load();
@@ -500,7 +353,6 @@ function playMusic(index) {
     
     updateMusicInfo(currentTrack);
     
-    // Reset progress
     const progressBar = document.querySelector('.progress');
     const currentTimeEl = document.getElementById('currentTime');
     if (progressBar) progressBar.style.width = '0%';
@@ -654,7 +506,6 @@ function updatePlaylistUI() {
 // ============================================
 // CONTADOR DE TEMPO
 // ============================================
-
 function updateTimeCounter() {
     const now = new Date();
     const diff = now - START_DATE;
@@ -662,7 +513,7 @@ function updateTimeCounter() {
     const seconds = Math.floor((diff / 1000) % 60);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24) );
     
     let months = 0;
     let tempDate = new Date(START_DATE);
@@ -694,7 +545,6 @@ function updateTimeCounter() {
 // ============================================
 // CARTA DE AMOR
 // ============================================
-
 function openLetter() {
     const letterContent = document.getElementById('letterContent');
     const envelope = document.querySelector('.envelope');
@@ -713,15 +563,61 @@ function openLetter() {
     envelope.style.transform = 'scale(0.95)';
     envelope.style.pointerEvents = 'none';
     
-    if (CONFIG.settings?.enableConfetti !== false) {
+    if (CONFIG?.settings?.enableConfetti !== false) {
         createConfetti('letter');
     }
 }
 
 // ============================================
-// GALERIA/LIGHTBOX
+// CARREGAR GALERIA DE FOTOS
 // ============================================
+function loadGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) {
+        console.error('Elemento galleryGrid não encontrado');
+        return;
+    }
+    
+    if (!GALLERY_IMAGES || GALLERY_IMAGES.length === 0) {
+        console.warn('Nenhuma imagem configurada');
+        galleryGrid.innerHTML = '<p class="no-images">Nenhuma imagem encontrada. Adicione imagens no config.js</p>';
+        return;
+    }
+    
+    let html = '';
+    
+    GALLERY_IMAGES.forEach((imagePath, index) => {
+        const caption = (galleryCaptions && galleryCaptions[index]) ? galleryCaptions[index] : 'Momento especial ❤️';
+        
+        const dateMatch = caption.match(/(\d{2}\/\d{2}\/\d{4})/);
+        const date = dateMatch ? dateMatch[0] : 'Data especial';
+        // <span class="gallery-date">${date}</span>
+        html += `
+            <div class="gallery-item" onclick="openLightbox(${index})">
+                <div class="gallery-image" style="background-image: url('${imagePath}'); background-size: cover; background-position: center;">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    
+                </div>
+                <p class="gallery-caption">${caption}</p>
+            </div>
+        `;
+    });
+    
+    galleryGrid.innerHTML = html;
+    
+    GALLERY_IMAGES.forEach((imagePath, index) => {
+        const img = new Image();
+        img.onload = () => console.log(`✅ Imagem ${index + 1} carregada: ${imagePath}`);
+        img.onerror = () => console.error(`❌ Erro ao carregar imagem ${index + 1}: ${imagePath} - Verifique se o arquivo existe na pasta imagens/`);
+        img.src = imagePath;
+    });
+}
 
+// ============================================
+// LIGHTBOX
+// ============================================
 function openLightbox(index) {
     currentImageIndex = index;
     const lightbox = document.getElementById('lightbox');
@@ -755,7 +651,8 @@ function closeLightbox() {
 }
 
 function changeImage(direction) {
-    currentImageIndex = (currentImageIndex + direction + totalImages) % totalImages;
+    if (!GALLERY_IMAGES || GALLERY_IMAGES.length === 0) return;
+    currentImageIndex = (currentImageIndex + direction + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
     updateLightboxImage();
     
     document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
@@ -770,6 +667,7 @@ function changeImage(direction) {
 }
 
 function jumpToImage(index) {
+    if (!GALLERY_IMAGES || GALLERY_IMAGES.length === 0) return;
     currentImageIndex = index;
     updateLightboxImage();
     
@@ -788,11 +686,11 @@ function updateLightboxImage() {
     const image = document.querySelector('.lightbox-image');
     const caption = document.getElementById('lightboxCaption');
     
-    if (image) {
-        const icons = galleryIcons || ['❤️', '🌹', '🎂', '🎄', '🎊', '💕'];
-        const icon = icons[currentImageIndex] || '❤️';
-        image.innerHTML = icon.repeat(8);
-    }
+    if (!image || !GALLERY_IMAGES || !GALLERY_IMAGES[currentImageIndex]) return;
+    
+    const imgUrl = GALLERY_IMAGES[currentImageIndex];
+    image.innerHTML = `<img src="${imgUrl}" alt="Foto ${currentImageIndex + 1}" onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<div class=\'error-placeholder\'>❌ Imagem não encontrada<br><small>${imgUrl}</small></div>';">`;
+    
     if (caption && galleryCaptions && galleryCaptions[currentImageIndex]) {
         caption.textContent = galleryCaptions[currentImageIndex];
     }
@@ -801,7 +699,6 @@ function updateLightboxImage() {
 // ============================================
 // QUIZ
 // ============================================
-
 function initQuiz() {
     if (!QUIZ_QUESTIONS || QUIZ_QUESTIONS.length === 0) return;
     
@@ -878,7 +775,7 @@ function checkAnswer(selectedIndex) {
                 </span>
             `;
         }
-        if (CONFIG.settings?.enableConfetti !== false) {
+        if (CONFIG?.settings?.enableConfetti !== false) {
             createMiniConfetti();
         }
         showNotification('✅ Resposta correta! +10 pontos', 'success');
@@ -925,7 +822,7 @@ function endQuiz() {
     if (percentage === 100) {
         message = 'Perfeito! Você me conhece mais do que eu mesmo!';
         emoji = '🏆';
-        if (CONFIG.settings?.enableConfetti !== false) {
+        if (CONFIG?.settings?.enableConfetti !== false) {
             createConfetti('win');
         }
     } else if (percentage >= 70) {
@@ -967,7 +864,6 @@ function endQuiz() {
 // ============================================
 // MURAL DE RECADOS
 // ============================================
-
 function addWallMessage() {
     const input = document.getElementById('wallInput');
     if (!input) return;
@@ -1017,7 +913,7 @@ function addWallMessage() {
         updateStats();
         
         showNotification('💕 Mensagem enviada com amor!', 'heart');
-        if (CONFIG.settings?.enableConfetti !== false) {
+        if (CONFIG?.settings?.enableConfetti !== false) {
             createMiniConfetti();
         }
         
@@ -1130,7 +1026,6 @@ function loadWallMessages() {
 // ============================================
 // WISHLIST
 // ============================================
-
 function initWishlist() {
     if (WISHLIST && WISHLIST.length > 0) {
         const wishlistContainer = document.querySelector('.wishlist');
@@ -1160,7 +1055,7 @@ function initWishlist() {
                 if (item) item.classList.add('checked');
                 const wishText = item ? item.querySelector('.wish-text') : null;
                 showNotification(`✨ Sonho realizado: ${wishText ? wishText.textContent : ''}`, 'success');
-                if (CONFIG.settings?.enableConfetti !== false) {
+                if (CONFIG?.settings?.enableConfetti !== false) {
                     createMiniConfetti();
                 }
                 wishesCompleted++;
@@ -1209,7 +1104,7 @@ function updateWishlistProgress() {
             messageEl.textContent = 'Quase lá! Mais alguns sonhos para realizar! 💫';
         } else {
             messageEl.textContent = 'PARABÉNS! Todos os sonhos realizados! 🎉❤️';
-            if (CONFIG.settings?.enableConfetti !== false) {
+            if (CONFIG?.settings?.enableConfetti !== false) {
                 createConfetti('win');
             }
             showNotification('🎉 TODOS OS SONHOS REALIZADOS!', 'congrats');
@@ -1230,7 +1125,6 @@ function saveWishlistProgress() {
 // ============================================
 // JOGO DA MEMÓRIA
 // ============================================
-
 function initMemoryGame() {
     const gameContainer = document.getElementById('memoryGame');
     if (!gameContainer) return;
@@ -1373,7 +1267,7 @@ function endMemoryGame() {
     clearInterval(memoryTimer);
     
     showNotification(`🎮 Parabéns! Você completou o jogo! ${moves} movimentos, ${seconds}s`, 'win');
-    if (CONFIG.settings?.enableConfetti !== false) {
+    if (CONFIG?.settings?.enableConfetti !== false) {
         createConfetti('win');
     }
 }
@@ -1402,7 +1296,6 @@ function shuffleMemoryCards() {
 // ============================================
 // CARROSSEL DE MEMÓRIAS
 // ============================================
-
 function initMemoriesCarousel() {
     const container = document.querySelector('.memories-carousel');
     if (!container || !MEMORIES || MEMORIES.length === 0) return;
@@ -1445,7 +1338,6 @@ function expandMemory(index) {
 // ============================================
 // POEMA DO DIA
 // ============================================
-
 function initPoemOfTheDay() {
     const container = document.querySelector('.poem-container');
     if (!container || !POEMS || POEMS.length === 0) return;
@@ -1473,7 +1365,6 @@ function initPoemOfTheDay() {
 // ============================================
 // CALENDÁRIO
 // ============================================
-
 function renderCalendar() {
     const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -1602,7 +1493,6 @@ function nextMonth() {
 // ============================================
 // GERADOR DE DECLARAÇÕES
 // ============================================
-
 function generateDeclaration() {
     if (!DECLARATIONS || DECLARATIONS.length === 0) return;
     
@@ -1633,7 +1523,6 @@ function generateDeclaration() {
 // ============================================
 // PRESENTE
 // ============================================
-
 function openGift() {
     const giftContent = document.getElementById('giftContent');
     if (!giftContent) return;
@@ -1641,7 +1530,7 @@ function openGift() {
     if (giftContent.classList.contains('hidden')) {
         giftContent.classList.remove('hidden');
         giftContent.style.animation = 'slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        if (CONFIG.settings?.enableConfetti !== false) {
+        if (CONFIG?.settings?.enableConfetti !== false) {
             createConfetti('gift');
         }
         showNotification('🎁 Presente aberto! Espero que goste ❤️', 'gift');
@@ -1653,9 +1542,8 @@ function openGift() {
 // ============================================
 // PRÓXIMO ENCONTRO
 // ============================================
-
 function updateNextDate() {
-    const nextDate = CONFIG.couple?.nextDate || new Date('2026-02-14T20:00:00');
+    const nextDate = CONFIG?.couple?.nextDate || new Date('2026-02-14T20:00:00');
     const now = new Date();
     const diff = nextDate - now;
     
@@ -1666,8 +1554,8 @@ function updateNextDate() {
     const locationElement = document.querySelector('.next-date-location span');
     
     if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
-    if (planElement) planElement.innerHTML = CONFIG.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
-    if (locationElement) locationElement.textContent = CONFIG.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
+    if (planElement) planElement.innerHTML = CONFIG?.couple?.nextDateDescription || 'Dia dos Namorados ❤️';
+    if (locationElement) locationElement.textContent = CONFIG?.couple?.nextDateLocation || 'Restaurante Italiano, 20:00';
     
     if (days === 0) {
         if (daysElement) {
@@ -1678,7 +1566,7 @@ function updateNextDate() {
             planElement.innerHTML = 'HOJE É O GRANDE DIA! 🎉❤️';
             planElement.style.animation = 'pulse 1s infinite';
         }
-        if (CONFIG.settings?.enableConfetti !== false) {
+        if (CONFIG?.settings?.enableConfetti !== false) {
             createConfetti('date');
         }
     } else if (days === 1) {
@@ -1690,7 +1578,6 @@ function updateNextDate() {
 // ============================================
 // NOTIFICAÇÕES
 // ============================================
-
 function initNotifications() {
     if (!document.querySelector('.notification-container')) {
         const container = document.createElement('div');
@@ -1700,7 +1587,7 @@ function initNotifications() {
 }
 
 function showNotification(message, type = 'info') {
-    if (CONFIG.settings?.enableNotifications === false) return;
+    if (CONFIG?.settings?.enableNotifications === false) return;
     
     const container = document.querySelector('.notification-container');
     if (!container) return;
@@ -1743,12 +1630,22 @@ function showNotification(message, type = 'info') {
 // ============================================
 // CONFETES
 // ============================================
-
 function createConfetti(type = 'default') {
-    if (CONFIG.settings?.enableConfetti === false) return;
+    if (CONFIG?.settings?.enableConfetti === false) return;
     
-    const canvas = document.getElementById('confettiCanvas');
-    if (!canvas) return;
+    let canvas = document.getElementById('confettiCanvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'confettiCanvas';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '9999';
+        document.body.appendChild(canvas);
+    }
     
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -1802,6 +1699,7 @@ function createConfetti(type = 'default') {
         } else {
             cancelAnimationFrame(animationFrame);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.remove();
         }
     }
     
@@ -1815,9 +1713,8 @@ function createMiniConfetti() {
 // ============================================
 // CORAÇÕES FLUTUANTES
 // ============================================
-
 function startFloatingHearts() {
-    if (CONFIG.settings?.enableFloatingHearts === false) return;
+    if (CONFIG?.settings?.enableFloatingHearts === false) return;
     
     const container = document.querySelector('.floating-hearts-container');
     if (!container) return;
@@ -1845,14 +1742,12 @@ function startFloatingHearts() {
 }
 
 // ============================================
-// BOTÃO BACK TO TOP CORRIGIDO
+// BOTÃO BACK TO TOP
 // ============================================
-
 function setupBackToTop() {
     const backToTop = document.getElementById('backToTop');
     if (!backToTop) return;
     
-    // Posicionar corretamente
     backToTop.style.position = 'fixed';
     backToTop.style.bottom = '30px';
     backToTop.style.right = '30px';
@@ -1877,7 +1772,6 @@ function setupBackToTop() {
 // ============================================
 // ANIMAÇÕES DE SCROLL
 // ============================================
-
 function setupScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1900,7 +1794,6 @@ function setupScrollAnimations() {
 // ============================================
 // ESTATÍSTICAS
 // ============================================
-
 function loadStats() {
     try {
         visitCount = parseInt(localStorage.getItem('visitCount') || '0') + 1;
@@ -1947,7 +1840,6 @@ function updateStats() {
 // ============================================
 // SUBSTITUIR NOMES
 // ============================================
-
 function replaceNames() {
     document.querySelectorAll('.footer-signature strong, .gift-signature').forEach(el => {
         if (el) el.textContent = YOUR_NAME;
@@ -1960,14 +1852,13 @@ function replaceNames() {
     const greeting = document.querySelector('.greeting');
     if (greeting) {
         const randomNick = NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
-        greeting.innerHTML = `Para ${randomNick}, meu amor ❤️`;
+        greeting.innerHTML = `Para ti ${randomNick}❤️`;
     }
 }
 
 // ============================================
 // ATUALIZAR ANO NO FOOTER
 // ============================================
-
 function updateFooterYear() {
     const yearEl = document.querySelector('.footer-date');
     if (yearEl) {
@@ -1977,9 +1868,17 @@ function updateFooterYear() {
 }
 
 // ============================================
+// INICIAR QUANDO O DOM ESTIVER PRONTO
+// ============================================
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
+
+// ============================================
 // EXPOR FUNÇÕES GLOBAIS
 // ============================================
-
 window.openLightbox = openLightbox;
 window.closeLightbox = closeLightbox;
 window.changeImage = changeImage;
